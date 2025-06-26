@@ -25,30 +25,42 @@
     </div>
     <!-- Nav Item - Kategori -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="{{ route('admin.index') }}" aria-expanded="true">
+        <a class="nav-link collapsed" href="{{ route('admin.paket-wisata.index') }}" aria-expanded="true">
             <i class="fas fa-fw fa-cog"></i>
-            <span>Kategori</span>
+            <span>Paket Wisata</span>
         </a>
     </li>
     <!-- Nav Item - Produk -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="{{ route('admin.index') }}" aria-expanded="true">
+        <a class="nav-link collapsed" href="{{ route('admin.gallery.index') }}" aria-expanded="true">
             <i class="fas fa-fw fa-cog"></i>
-            <span>Produk</span>
+            <span>Gallery</span>
         </a>
     </li>
     <!-- Nav Item - Konsumen -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="{{ route('admin.index') }}" aria-expanded="true">
+        <a class="nav-link collapsed" href="{{ route('admin.video.index') }}" aria-expanded="true">
             <i class="fas fa-fw fa-cog"></i>
-            <span>Konsumen</span>
+            <span>Video</span>
         </a>
     </li>
     <!-- Nav Item - Order -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="{{ route('admin.index') }}" aria-expanded="true">
+        <a class="nav-link collapsed" href="{{ route('admin.berita.index') }}" aria-expanded="true">
             <i class="fas fa-fw fa-cog"></i>
-            <span>Order</span>
+            <span>Berita</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="{{ route('admin.pemesanan.index') }}" aria-expanded="true">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Pemesanan</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="{{ route('admin.member.index') }}" aria-expanded="true">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Member</span>
         </a>
     </li>
 
