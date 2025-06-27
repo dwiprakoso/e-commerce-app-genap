@@ -30,6 +30,11 @@ Route::prefix('video')->group(function () {
 });
 Route::prefix('berita')->group(function () {
     Route::get('/', [BeritaController::class, 'index'])->name('admin.berita.index');
+    Route::get('/create', [BeritaController::class, 'create'])->name('admin.berita.create');
+    Route::post('/store', [BeritaController::class, 'store'])->name('admin.berita.store');
+    Route::get('/edit/{id}', [BeritaController::class, 'edit'])->name('admin.berita.edit');
+    Route::put('/update/{id}', [BeritaController::class, 'update'])->name('admin.berita.update');
+    Route::delete('/delete/{id}', [BeritaController::class, 'destroy'])->name('admin.berita.destroy');
 });
 Route::prefix('pemesanan')->group(function () {
     Route::get('/', [PemesananController::class, 'index'])->name('admin.pemesanan.index');
