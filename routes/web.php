@@ -19,6 +19,11 @@ Route::prefix('paket-wisata')->group(function () {
 });
 Route::prefix('gallery')->group(function () {
     Route::get('/', [GalleryController::class, 'index'])->name('admin.gallery.index');
+    Route::get('/create', [GalleryController::class, 'create'])->name('admin.gallery.create');
+    Route::post('/store', [GalleryController::class, 'store'])->name('admin.gallery.store');
+    Route::get('/edit/{id}', [GalleryController::class, 'edit'])->name('admin.gallery.edit');
+    Route::put('/update/{id}', [GalleryController::class, 'update'])->name('admin.gallery.update');
+    Route::delete('/delete/{id}', [GalleryController::class, 'destroy'])->name('admin.gallery.destroy');
 });
 Route::prefix('video')->group(function () {
     Route::get('/', [VideoController::class, 'index'])->name('admin.video.index');
