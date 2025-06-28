@@ -32,6 +32,11 @@ Route::prefix('gallery')->group(function () {
 });
 Route::prefix('video')->group(function () {
     Route::get('/', [VideoController::class, 'index'])->name('admin.video.index');
+    Route::get('/create', [VideoController::class, 'create'])->name('admin.video.create');
+    Route::post('/store', [VideoController::class, 'store'])->name('admin.video.store');
+    Route::get('/edit/{id}', [VideoController::class, 'edit'])->name('admin.video.edit');
+    Route::put('/update/{id}', [VideoController::class, 'update'])->name('admin.video.update');
+    Route::delete('/delete/{id}', [VideoController::class, 'destroy'])->name('admin.video.destroy');
 });
 Route::prefix('berita')->group(function () {
     Route::get('/', [BeritaController::class, 'index'])->name('admin.berita.index');
