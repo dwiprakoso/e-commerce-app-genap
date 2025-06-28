@@ -29,13 +29,28 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Nama Produk</th>
-                                    <th>Deskripsi</th>
-                                    <th>Dibuat pada</th>
+                                    <th>Nama</th>
+                                    <th>Email</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach ($members as $member)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $member->name }}</td>
+                                        <td>{{ $member->email }}</td>
+                                        <td>
+                                            <a href="#" class="btn btn-warning btn-sm">Edit</a>
+                                            <form action="#" method="POST" style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm"
+                                                    onclick="return confirm('Are you sure you want to delete this member?')">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
 
                             </tbody>
                         </table>
