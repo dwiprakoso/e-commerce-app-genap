@@ -16,6 +16,11 @@ Route::get('/', [DashboardController::class, 'index'])->name('admin.index');
 
 Route::prefix('paket-wisata')->group(function () {
     Route::get('/', [PaketWisataController::class, 'index'])->name('admin.paket-wisata.index');
+    Route::get('/create', [PaketWisataController::class, 'create'])->name('admin.paket-wisata.create');
+    Route::post('/store', [PaketWisataController::class, 'store'])->name('admin.paket-wisata.store');
+    Route::get('/edit/{id}', [PaketWisataController::class, 'edit'])->name('admin.paket-wisata.edit');
+    Route::put('/update/{id}', [PaketWisataController::class, 'update'])->name('admin.paket-wisata.update');
+    Route::delete('/delete/{id}', [PaketWisataController::class, 'destroy'])->name('admin.paket-wisata.destroy');
 });
 Route::prefix('gallery')->group(function () {
     Route::get('/', [GalleryController::class, 'index'])->name('admin.gallery.index');

@@ -28,7 +28,7 @@
             <!-- DataTales Example -->
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <a href="{{ route('admin.berita.create') }}" class="btn btn-primary">
+                    <a href="{{ route('admin.paket-wisata.create') }}" class="btn btn-primary">
                         <i class="fas fa-plus"></i> Tambah Paket Wisata
                     </a>
                 </div>
@@ -48,7 +48,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($paketwisatas as $paketwisata)
+                                @forelse ($paketwisatas as $paketwisata)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $paketwisata->title }}</td>
@@ -56,13 +56,21 @@
                                         <td>Rp {{ number_format($paketwisata->price, 0, ',', '.') }}</td>
                                         <td>{{ $paketwisata->start_date->format('d-m-Y') }}</td>
                                         <td>{{ $paketwisata->end_date->format('d-m-Y') }}</td>
-                                        <td>{{ $paketwisata->status ? 'Aktif' : 'Tidak Aktif' }}</td>
                                         <td>
-                                            <a href="#" class="btn btn-sm btn-warning">
+                                            @if ($paketwisata->status == 'publish')
+                                                <span class="badge badge-success">Publish</span>
+                                            @else
+                                                <span class="badge badge-warning">Draft</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('admin.paket-wisata.edit', $paketwisata->id) }}"
+                                                class="btn btn-sm btn-warning">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <form action="#" method="POST" class="d-inline"
-                                                onsubmit="return confirm('Yakin mau hapus berita ini?')">
+                                            <form action="{{ route('admin.paket-wisata.destroy', $paketwisata->id) }}"
+                                                method="POST" class="d-inline"
+                                                onsubmit="return confirm('Yakin mau hapus paket wisata ini?')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-danger">
@@ -71,20 +79,19 @@
                                             </form>
                                         </td>
                                     </tr>
-                                @endforeach
-                                {{-- @empty
+                                @empty
                                     <tr>
-                                        <td colspan="6" class="text-center">
+                                        <td colspan="9" class="text-center">
                                             <div class="py-4">
-                                                <i class="fas fa-newspaper fa-3x text-muted mb-3"></i>
-                                                <p class="text-muted">Belum ada data berita</p>
-                                                <a href="{{ route('admin.berita.create') }}" class="btn btn-primary">
-                                                    <i class="fas fa-plus"></i> Tambah Berita Pertama
+                                                <i class="fas fa-suitcase-rolling fa-3x text-muted mb-3"></i>
+                                                <p class="text-muted">Belum ada data paket wisata</p>
+                                                <a href="{{ route('admin.paket-wisata.create') }}" class="btn btn-primary">
+                                                    <i class="fas fa-plus"></i> Tambah Paket Wisata Pertama
                                                 </a>
                                             </div>
                                         </td>
                                     </tr>
-                                    @endforelse --}}
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
@@ -106,11 +113,11 @@
                     "url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/Indonesian.json"
                 },
                 "order": [
-                    [4, "desc"]
-                ], // Sort by created_at desc
+                    [5, "desc"]
+                ], // Sort by start_date desc
                 "columnDefs": [{
                         "orderable": false,
-                        "targets": [1, 5]
+                        "targets": [1, 8]
                     } // Disable sorting for image and action columns
                 ]
             });
