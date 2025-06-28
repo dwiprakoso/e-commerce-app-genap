@@ -29,13 +29,42 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Nama Produk</th>
-                                    <th>Deskripsi</th>
-                                    <th>Dibuat pada</th>
+                                    <th>Nama Member</th>
+                                    <th>Paket Wisata</th>
+                                    <th>Jumlah Orang</th>
+                                    <th>Total Harga</th>
+                                    <th>Status</th>
+                                    <th>Bukti Bayar</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach ($pemesanans as $pemesanan)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $pemesanan->member->name }}</td>
+                                        <td>{{ $pemesanan->paketwisata->title }}</td>
+                                        <td>{{ $pemesanan->jumlah_orang }}</td>
+                                        <td>Rp. {{ number_format($pemesanan->total_harga, 0, ',', '.') }}</td>
+                                        <td>{{ $pemesanan->status }}</td>
+                                        <td>
+                                            @if ($pemesanan->bukti_bayar)
+                                                <a href="#" target="_blank">Lihat Bukti Bayar</a>
+                                            @else
+                                                Tidak ada bukti bayar
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <!-- Add action buttons here if needed -->
+                                            <a href="#" class="btn btn-sm btn-info">
+                                                <i class="fas fa-info"></i>
+                                            </a>
+                                            <a href="#" class="btn btn-sm btn-warning">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
 
                             </tbody>
                         </table>
