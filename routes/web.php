@@ -39,6 +39,13 @@ Route::prefix('member')->group(function () {
         // Berita Routes
         Route::get('/berita', [MemberDashboardController::class, 'berita'])->name('member.berita.index');
         Route::get('/berita/{id}', [MemberDashboardController::class, 'detailBerita'])->name('member.berita.show');
+        // Video Routes
+        Route::get('/video', [MemberDashboardController::class, 'video'])->name('member.video.index');
+        Route::get('/video/{id}', [MemberDashboardController::class, 'detailVideo'])->name('member.video.show');
+        // Galeri Routes
+        Route::get('/galeri', [MemberDashboardController::class, 'gallery'])->name('member.galeri.index');
+        Route::get('/galeri/{id}', [MemberDashboardController::class, 'detailGallery'])->name('member.galeri.show');
+
         Route::post('/logout', [MemberAuthController::class, 'logout'])->name('member.logout');
     });
 });

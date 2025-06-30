@@ -8,11 +8,13 @@
             </div>
 
             <div class="hidden md:flex space-x-6">
-                <a href="{{ rote('member.home') }}" class="text-gray-700 hover:text-blue-600 transition">Beranda</a>
+                <a href="{{ route('member.home') }}" class="text-gray-700 hover:text-blue-600 transition">Beranda</a>
                 <a href="{{ route('member.paket-wisata.index') }}"
                     class="text-gray-700 hover:text-blue-600 transition">Paket Wisata</a>
-                <a href="#gallery" class="text-gray-700 hover:text-blue-600 transition">Galeri</a>
-                <a href="#gallery" class="text-gray-700 hover:text-blue-600 transition">Video</a>
+                <a href="{{ route('member.galeri.index') }}"
+                    class="text-gray-700 hover:text-blue-600 transition">Galeri</a>
+                <a href="{{ route('member.video.index') }}"
+                    class="text-gray-700 hover:text-blue-600 transition">Video</a>
                 <a href="{{ route('member.berita.index') }}"
                     class="text-gray-700 hover:text-blue-600 transition">Berita</a>
             </div>

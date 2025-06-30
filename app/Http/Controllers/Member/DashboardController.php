@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Member;
 
-use App\Http\Controllers\Controller;
+use App\Models\Video;
 use App\Models\Berita;
+use App\Models\Gallery;
 use App\Models\PaketWisata;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
 {
@@ -90,5 +92,62 @@ class DashboardController extends Controller
             ->get();
 
         return view('member.page.berita.detail', compact('berita', 'beritaLainnya'));
+    }
+    // Fungsi untuk halaman index video
+    public function video(Request $request)
+    {
+        $query = Video::query();
+
+        // Filter berdasarkan pencarian
+        if ($request->has('search') && $request->search != '') {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+
+        $videos = $query->orderBy('created_at', 'desc')->get();
+
+        return view('member.page.video.index', compact('videos'));
+    }
+
+    // Fungsi untuk detail video
+    public function detailVideo($id)
+    {
+        $video = Video::findOrFail($id);
+
+        // Ambil video lain (excluding current)
+        $videoLainnya = Video::where('id', '!=', $id)
+            ->orderBy('created_at', 'desc')
+            ->take(3)
+            ->get();
+
+        return view('member.page.video.detail', compact('video', 'videoLainnya'));
+    }
+
+    // Fungsi untuk halaman index gallery
+    public function gallery(Request $request)
+    {
+        $query = Gallery::query();
+
+        // Filter berdasarkan pencarian caption
+        if ($request->has('search') && $request->search != '') {
+            $query->where('caption', 'like', '%' . $request->search . '%');
+        }
+
+        $galleries = $query->orderBy('created_at', 'desc')->get();
+
+        return view('member.page.galeri.index', compact('galleries'));
+    }
+
+    // Fungsi untuk detail gallery
+    public function detailGallery($id)
+    {
+        $gallery = Gallery::findOrFail($id);
+
+        // Ambil gambar gallery lain (excluding current)
+        $galleryLainnya = Gallery::where('id', '!=', $id)
+            ->orderBy('created_at', 'desc')
+            ->take(6)
+            ->get();
+
+        return view('member.page.galeri.detail', compact('gallery', 'galleryLainnya'));
     }
 }
