@@ -33,7 +33,6 @@ Route::prefix('member')->name('member.')->group(function () {
 
     // Authenticated member routes
     Route::middleware('auth:member')->group(function () {
-        Route::get('/dashboard', [MemberDashboardController::class, 'dashboard'])->name('dashboard');
         Route::post('/logout', [MemberAuthController::class, 'logout'])->name('logout');
     });
 });

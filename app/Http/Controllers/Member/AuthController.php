@@ -41,7 +41,7 @@ class AuthController extends Controller
 
         if (Auth::guard('member')->attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
-            return redirect()->intended(route('member.dashboard'));
+            return redirect()->intended(route('member.home'));
         }
 
         return redirect()->back()
@@ -71,7 +71,7 @@ class AuthController extends Controller
 
         Auth::guard('member')->login($member);
 
-        return redirect()->route('member.dashboard')->with('success', 'Registrasi berhasil!');
+        return redirect()->route('member.home')->with('success', 'Registrasi berhasil!');
     }
 
     public function logout(Request $request)
@@ -145,7 +145,7 @@ class AuthController extends Controller
             if ($existingMember) {
                 // Login existing user
                 Auth::guard('member')->login($existingMember);
-                return redirect()->intended(route('member.dashboard'))
+                return redirect()->intended(route('member.home'))
                     ->with('success', 'Berhasil login dengan ' . ucfirst($provider) . '!');
             }
 
@@ -164,7 +164,7 @@ class AuthController extends Controller
                     }
 
                     Auth::guard('member')->login($existingMember);
-                    return redirect()->intended(route('member.dashboard'))
+                    return redirect()->intended(route('member.home'))
                         ->with('success', 'Berhasil login dengan ' . ucfirst($provider) . '!');
                 }
             }
@@ -178,7 +178,7 @@ class AuthController extends Controller
             ]);
 
             Auth::guard('member')->login($member);
-            return redirect()->intended(route('member.dashboard'))
+            return redirect()->intended(route('member.home'))
                 ->with('success', 'Berhasil registrasi dan login dengan ' . ucfirst($provider) . '!');
         } catch (Exception $e) {
             // Log error detail untuk debugging
