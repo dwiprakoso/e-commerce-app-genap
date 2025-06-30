@@ -33,8 +33,12 @@ Route::prefix('member')->group(function () {
 
     // Authenticated member routes
     Route::middleware('auth:member')->group(function () {
+        // Paket Wisata Routes
         Route::get('/paket-wisata', [MemberDashboardController::class, 'paketWisata'])->name('member.paket-wisata.index');
         Route::get('/paket-wisata/{id}', [MemberDashboardController::class, 'detailPaketWisata'])->name('member.paket-wisata.show');
+        // Berita Routes
+        Route::get('/berita', [MemberDashboardController::class, 'berita'])->name('member.berita.index');
+        Route::get('/berita/{id}', [MemberDashboardController::class, 'detailBerita'])->name('member.berita.show');
         Route::post('/logout', [MemberAuthController::class, 'logout'])->name('member.logout');
     });
 });

@@ -21,14 +21,13 @@ class DashboardController extends Controller
 
         return view('member.page.home', compact('paketWisata', 'berita'));
     }
+
     public function paketWisata(Request $request)
     {
         $query = PaketWisata::query();
 
-        // Filter berdasarkan status
-        if ($request->has('status') && $request->status != '') {
-            $query->where('status', $request->status);
-        }
+        // Filter hanya yang berstatus publish
+        $query->where('status', 'publish');
 
         // Filter berdasarkan tanggal mulai
         if ($request->has('start_date') && $request->start_date != '') {
@@ -59,5 +58,37 @@ class DashboardController extends Controller
             ->get();
 
         return view('member.page.paket-wisata.detail', compact('paket', 'paketLainnya'));
+    }
+
+    // Fungsi untuk halaman index berita
+    public function berita(Request $request)
+    {
+        $query = Berita::query();
+
+        // Filter berdasarkan pencarian
+        if ($request->has('search') && $request->search != '') {
+            $query->where(function ($q) use ($request) {
+                $q->where('title', 'like', '%' . $request->search . '%')
+                    ->orWhere('content', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        $berita = $query->orderBy('created_at', 'desc')->get();
+
+        return view('member.page.berita.index', compact('berita'));
+    }
+
+    // Fungsi untuk detail berita
+    public function detailBerita($id)
+    {
+        $berita = Berita::findOrFail($id);
+
+        // Ambil berita lain (excluding current)
+        $beritaLainnya = Berita::where('id', '!=', $id)
+            ->orderBy('created_at', 'desc')
+            ->take(3)
+            ->get();
+
+        return view('member.page.berita.detail', compact('berita', 'beritaLainnya'));
     }
 }

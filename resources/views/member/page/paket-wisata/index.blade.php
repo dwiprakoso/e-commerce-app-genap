@@ -10,34 +10,6 @@
         </div>
     </section>
 
-    <!-- Filter Section -->
-    <section class="bg-white py-8 border-b">
-        <div class="container mx-auto px-4">
-            <form method="GET" action="{{ route('member.paket-wisata.index') }}"
-                class="flex flex-wrap items-center justify-between gap-4">
-                <div class="flex items-center space-x-4">
-                    <label class="text-gray-700 font-medium">Filter:</label>
-                    <select name="status"
-                        class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="">Semua Status</option>
-                        <option value="publish" {{ request('status') == 'publish' ? 'selected' : '' }}>Publish</option>
-                        <option value="draft" {{ request('status') == 'draft' ? 'selected' : '' }}>Draft</option>
-                    </select>
-                    <input type="date" name="start_date" value="{{ request('start_date') }}"
-                        class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Tanggal Mulai">
-                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari paket wisata..."
-                        class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
-                        <i class="fas fa-search mr-2"></i>Cari
-                    </button>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <span class="text-gray-600">{{ $paketWisata->count() }} paket tersedia</span>
-                </div>
-            </form>
-        </div>
-    </section>
 
     <!-- Paket Wisata Section -->
     <section class="py-16 bg-gray-50">
@@ -51,19 +23,6 @@
                                 <div class="absolute inset-0 flex items-center justify-center">
                                     <i class="fas fa-mountain text-white text-4xl opacity-50"></i>
                                 </div>
-                                <!-- Status Badge -->
-                                <div class="absolute top-4 right-4">
-                                    @if ($paket->status == 'publish')
-                                        <span class="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                                            Tersedia
-                                        </span>
-                                    @else
-                                        <span class="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                                            Draft
-                                        </span>
-                                    @endif
-                                </div>
-
                                 <!-- Price Badge -->
                                 <div class="absolute bottom-4 left-4">
                                     <span class="bg-white text-blue-600 px-3 py-2 rounded-lg font-bold text-lg shadow-md">
