@@ -5,97 +5,162 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login - Wisata Nusantara</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- SB Admin 2 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/startbootstrap-sb-admin-2/4.1.4/css/sb-admin-2.min.css"
+        rel="stylesheet">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Minimal custom CSS for admin theme */
+        .bg-admin-image {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bg-admin-image::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            content: "\f3ed";
+            font-size: 8rem;
+            color: rgba(255, 255, 255, 0.1);
+        }
+
+        .admin-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+    </style>
 </head>
 
-<body class="bg-gradient-to-br from-gray-700 to-gray-900 min-h-screen flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md">
-        <!-- Header -->
-        <div class="text-center p-8 pb-4">
-            <div class="flex justify-center items-center space-x-2 mb-4">
-                <i class="fas fa-shield-alt text-gray-700 text-3xl"></i>
-                <span class="text-2xl font-bold text-gray-800">Admin Panel</span>
-            </div>
-            <h2 class="text-2xl font-bold text-gray-800 mb-2">Login Administrator</h2>
-            <p class="text-gray-600">Masuk ke panel administrasi</p>
-        </div>
+<body class="bg-gradient-primary">
+    <div class="container">
+        <!-- Outer Row -->
+        <div class="row justify-content-center">
+            <div class="col-xl-10 col-lg-12 col-md-9">
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <!-- Nested Row within Card Body -->
+                        <div class="row">
+                            <div class="col-lg-6 d-none d-lg-block bg-admin-image"></div>
+                            <div class="col-lg-6">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <div class="admin-badge">
+                                            <i class="fas fa-shield-alt mr-2"></i>Administrator
+                                        </div>
+                                        <h1 class="h4 text-gray-900 mb-4">Login Administrator</h1>
+                                        <p class="text-muted mb-4">Masuk ke panel administrasi</p>
+                                    </div>
 
-        <!-- Form -->
-        <div class="px-8 pb-8">
-            @if ($errors->any())
-                <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
-                    <div class="flex">
-                        <i class="fas fa-exclamation-circle mt-0.5 mr-2"></i>
-                        <div>
-                            @foreach ($errors->all() as $error)
-                                <div>{{ $error }}</div>
-                            @endforeach
+                                    <!-- Error Messages -->
+                                    @if ($errors->any())
+                                        <div class="alert alert-danger">
+                                            <div class="d-flex">
+                                                <i class="fas fa-exclamation-circle mt-1 mr-2"></i>
+                                                <div>
+                                                    @foreach ($errors->all() as $error)
+                                                        <div>{{ $error }}</div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    <!-- Login Form -->
+                                    <form method="POST" action="{{ route('admin.login') }}" class="user">
+                                        @csrf
+                                        <div class="form-group">
+                                            <input type="email"
+                                                class="form-control form-control-user @error('email') is-invalid @enderror"
+                                                id="email" name="email" value="{{ old('email') }}"
+                                                placeholder="Masukkan Email Administrator..." required
+                                                autocomplete="email" autofocus>
+                                            @error('email')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input type="password"
+                                                    class="form-control form-control-user @error('password') is-invalid @enderror"
+                                                    id="password" name="password" placeholder="Password" required
+                                                    autocomplete="current-password">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-outline-secondary" type="button"
+                                                        onclick="togglePassword()"
+                                                        style="border-radius: 0 50px 50px 0; border-color: #d1d3e2;"
+                                                        tabindex="-1">
+                                                        <i id="passwordIcon" class="fas fa-eye"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            @error('password')
+                                                <div class="invalid-feedback d-block">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="custom-control custom-checkbox small">
+                                                <input type="checkbox" class="custom-control-input" id="customCheck"
+                                                    name="remember" {{ old('remember') ? 'checked' : '' }}>
+                                                <label class="custom-control-label" for="customCheck">Ingat saya</label>
+                                            </div>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-primary btn-user btn-block">
+                                            <i class="fas fa-sign-in-alt mr-2"></i>Login sebagai Admin
+                                        </button>
+                                    </form>
+
+                                    <hr>
+
+                                    <!-- Security Notice -->
+                                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                        <i class="fas fa-shield-alt mr-2"></i>
+                                        <strong>Area Terbatas:</strong> Hanya administrator yang memiliki akses ke panel
+                                        ini.
+                                    </div>
+
+                                    <!-- Back to Home -->
+                                    <div class="text-center mt-3">
+                                        <a class="small text-muted" href="{{ route('member.home') }}">
+                                            <i class="fas fa-arrow-left mr-1"></i>Kembali ke situs utama
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            @endif
-
-            <form method="POST" action="{{ route('admin.login') }}" class="space-y-6">
-                @csrf
-
-                <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
-                        <i class="fas fa-envelope mr-2"></i>Email Administrator
-                    </label>
-                    <input type="email" id="email" name="email" value="{{ old('email') }}" required
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent transition"
-                        placeholder="admin@example.com">
-                </div>
-
-                <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
-                        <i class="fas fa-lock mr-2"></i>Password
-                    </label>
-                    <div class="relative">
-                        <input type="password" id="password" name="password" required
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent transition pr-12"
-                            placeholder="Masukkan password">
-                        <button type="button" onclick="togglePassword()"
-                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700">
-                            <i id="passwordIcon" class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="flex items-center justify-between">
-                    <label class="flex items-center">
-                        <input type="checkbox" name="remember"
-                            class="rounded border-gray-300 text-gray-600 focus:ring-gray-500">
-                        <span class="ml-2 text-sm text-gray-600">Ingat saya</span>
-                    </label>
-                </div>
-
-                <button type="submit"
-                    class="w-full bg-gray-700 text-white py-3 rounded-lg hover:bg-gray-800 transition duration-200 font-semibold">
-                    <i class="fas fa-sign-in-alt mr-2"></i>Login sebagai Admin
-                </button>
-            </form>
-
-            <!-- Security Notice -->
-            <div class="mt-8 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                <div class="flex">
-                    <i class="fas fa-shield-alt text-yellow-600 mt-0.5 mr-2"></i>
-                    <div class="text-sm text-yellow-700">
-                        <strong>Area Terbatas:</strong> Hanya administrator yang memiliki akses ke panel ini.
-                    </div>
-                </div>
-            </div>
-
-            <!-- Back to Home -->
-            <div class="mt-6 text-center">
-                <a href="{{ route('member.home') }}" class="text-gray-500 hover:text-gray-700 transition text-sm">
-                    <i class="fas fa-arrow-left mr-1"></i>Kembali ke situs utama
-                </a>
             </div>
         </div>
     </div>
 
+    <!-- Bootstrap core JavaScript-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.easing/1.4.1/jquery.easing.min.js"></script>
+
+    <!-- Custom JavaScript -->
     <script>
         function togglePassword() {
             const passwordInput = document.getElementById('password');
@@ -111,6 +176,13 @@
                 passwordIcon.classList.add('fa-eye');
             }
         }
+
+        // Auto-hide alerts after 5 seconds
+        $(document).ready(function() {
+            setTimeout(function() {
+                $('.alert').fadeOut('slow');
+            }, 5000);
+        });
     </script>
 </body>
 
