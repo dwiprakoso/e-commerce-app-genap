@@ -13,4 +13,16 @@ class MemberController extends Controller
         $members = Member::all();
         return view('admin.page.member.index', compact('members'));
     }
+
+    public function destroy($id)
+    {
+        try {
+            $member = Member::findOrFail($id);
+            $member->delete();
+
+            return redirect()->route('admin.member.index')->with('success', 'Member berhasil dihapus!');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.member.index')->with('error', 'Gagal menghapus member!');
+        }
+    }
 }

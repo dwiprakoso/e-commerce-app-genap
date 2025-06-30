@@ -53,4 +53,5 @@ Route::prefix('pemesanan')->group(function () {
 });
 Route::prefix('member')->group(function () {
     Route::get('/', [MemberController::class, 'index'])->name('admin.member.index');
+    Route::delete('/delete/{id}', [MemberController::class, 'destroy'])->name('admin.member.destroy');
 });

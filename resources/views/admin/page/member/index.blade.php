@@ -12,17 +12,22 @@
                     </button>
                 </div>
             @endif
+
+            @if (session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+
             <!-- Page Heading -->
             <h1 class="h3 mb-2 text-gray-800">Member</h1>
-            <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
-                For more information about DataTables, please visit the <a target="_blank"
-                    href="https://datatables.net">official DataTables documentation</a>.</p>
+            <p class="mb-4">Halaman manajemen data member.</p>
 
             <!-- DataTales Example -->
             <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <a href="#" class="btn btn-primary">Tambah</a>
-                </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -35,23 +40,27 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($members as $member)
+                                @forelse ($members as $member)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $member->name }}</td>
                                         <td>{{ $member->email }}</td>
                                         <td>
-                                            <a href="#" class="btn btn-warning btn-sm">Edit</a>
-                                            <form action="#" method="POST" style="display:inline;">
+                                            <form action="{{ route('admin.member.destroy', $member->id) }}" method="POST"
+                                                class="d-inline" onsubmit="return confirm('Yakin mau hapus member ini?')">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm"
-                                                    onclick="return confirm('Are you sure you want to delete this member?')">Delete</button>
+                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
                                             </form>
                                         </td>
                                     </tr>
-                                @endforeach
-
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="text-center">Tidak ada data member</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
