@@ -48,6 +48,8 @@ Route::prefix('berita')->group(function () {
 });
 Route::prefix('pemesanan')->group(function () {
     Route::get('/', [PemesananController::class, 'index'])->name('admin.pemesanan.index');
+    Route::get('/edit/{id}', [PemesananController::class, 'edit'])->name('admin.pemesanan.edit');
+    Route::put('/update/{id}', [PemesananController::class, 'update'])->name('admin.pemesanan.update');
 });
 Route::prefix('member')->group(function () {
     Route::get('/', [MemberController::class, 'index'])->name('admin.member.index');

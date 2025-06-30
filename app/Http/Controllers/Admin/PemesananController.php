@@ -15,4 +15,25 @@ class PemesananController extends Controller
             ->paginate(10);
         return view('admin.page.pemesanan.index', compact('pemesanans'));
     }
+
+    public function edit($id)
+    {
+        $pemesanan = Pesan::with(['member', 'paketwisata'])->findOrFail($id);
+        return view('admin.page.pemesanan.edit', compact('pemesanan'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:pending,dibayar,diverifikasi,selesai,dibatalkan'
+        ]);
+
+        $pemesanan = Pesan::findOrFail($id);
+        $pemesanan->update([
+            'status' => $request->status
+        ]);
+
+        return redirect()->route('admin.pemesanan.index')
+            ->with('success', 'Status pemesanan berhasil diperbarui.');
+    }
 }
