@@ -16,24 +16,26 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [MemberDashboardController::class, 'home'])->name('member.home');
 
 // Member Auth Routes
-Route::prefix('member')->name('member.')->group(function () {
+Route::prefix('member')->group(function () {
     // Guest routes (tidak perlu login)
     Route::middleware('guest:member')->group(function () {
         // Auth form routes
-        Route::get('/login', [MemberAuthController::class, 'showLoginForm'])->name('login');
-        Route::post('/login', [MemberAuthController::class, 'login'])->name('login.post');
+        Route::get('/login', [MemberAuthController::class, 'showLoginForm'])->name('member.login');
+        Route::post('/login', [MemberAuthController::class, 'login'])->name('member.login.post');
 
-        Route::get('/register', [MemberAuthController::class, 'showRegisterForm'])->name('register');
-        Route::post('/register', [MemberAuthController::class, 'register'])->name('register.post');
+        Route::get('/register', [MemberAuthController::class, 'showRegisterForm'])->name('member.register');
+        Route::post('/register', [MemberAuthController::class, 'register'])->name('member.register.post');
 
         // Social login routes
-        Route::get('/auth/{provider}', [MemberAuthController::class, 'redirectToProvider'])->name('social.redirect');
-        Route::get('/auth/{provider}/callback', [MemberAuthController::class, 'handleProviderCallback'])->name('social.callback');
+        Route::get('/auth/{provider}', [MemberAuthController::class, 'redirectToProvider'])->name('member.social.redirect');
+        Route::get('/auth/{provider}/callback', [MemberAuthController::class, 'handleProviderCallback'])->name('member.social.callback');
     });
 
     // Authenticated member routes
     Route::middleware('auth:member')->group(function () {
-        Route::post('/logout', [MemberAuthController::class, 'logout'])->name('logout');
+        Route::get('/paket-wisata', [MemberDashboardController::class, 'paketWisata'])->name('member.paket-wisata.index');
+        Route::get('/paket-wisata/{id}', [MemberDashboardController::class, 'detailPaketWisata'])->name('member.paket-wisata.show');
+        Route::post('/logout', [MemberAuthController::class, 'logout'])->name('member.logout');
     });
 });
 
