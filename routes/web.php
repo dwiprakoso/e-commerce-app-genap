@@ -16,16 +16,25 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [MemberDashboardController::class, 'home'])->name('member.home');
 
 // Member Auth Routes
-Route::prefix('member')->group(function () {
-    Route::get('/login', [MemberAuthController::class, 'showLoginForm'])->name('member.login');
-    Route::post('/login', [MemberAuthController::class, 'login']);
-    Route::get('/register', [MemberAuthController::class, 'showRegisterForm'])->name('member.register');
-    Route::post('/register', [MemberAuthController::class, 'register']);
-    Route::post('/logout', [MemberAuthController::class, 'logout'])->name('member.logout');
+Route::prefix('member')->name('member.')->group(function () {
+    // Guest routes (tidak perlu login)
+    Route::middleware('guest:member')->group(function () {
+        // Auth form routes
+        Route::get('/login', [MemberAuthController::class, 'showLoginForm'])->name('login');
+        Route::post('/login', [MemberAuthController::class, 'login'])->name('login.post');
 
-    // Protected Member Routes
-    Route::middleware('member')->group(function () {
-        Route::get('/dashboard', [MemberDashboardController::class, 'dashboard'])->name('member.dashboard');
+        Route::get('/register', [MemberAuthController::class, 'showRegisterForm'])->name('register');
+        Route::post('/register', [MemberAuthController::class, 'register'])->name('register.post');
+
+        // Social login routes
+        Route::get('/auth/{provider}', [MemberAuthController::class, 'redirectToProvider'])->name('social.redirect');
+        Route::get('/auth/{provider}/callback', [MemberAuthController::class, 'handleProviderCallback'])->name('social.callback');
+    });
+
+    // Authenticated member routes
+    Route::middleware('auth:member')->group(function () {
+        Route::get('/dashboard', [MemberDashboardController::class, 'dashboard'])->name('dashboard');
+        Route::post('/logout', [MemberAuthController::class, 'logout'])->name('logout');
     });
 });
 
