@@ -121,8 +121,6 @@
 
     </div>
     <!-- End of Main Content -->
-
-    // Script yang diperbaiki untuk create.blade.php dan edit.blade.php
     <script>
         // Preview image before upload
         document.getElementById('image').addEventListener('change', function(e) {
