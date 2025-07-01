@@ -24,11 +24,23 @@ class PemesananController extends Controller
     public function exportExcel()
     {
         try {
+            // Check if data exists
+            $count = Pesan::count();
+            if ($count == 0) {
+                return redirect()->back()->with('warning', 'Tidak ada data untuk diexport');
+            }
+
             $fileName = 'pemesanan_' . date('Y-m-d_H-i-s') . '.xlsx';
-            return Excel::download(new PemesananExport, $fileName);
+
+            // Use response()->download() for better error handling
+            return Excel::download(new PemesananExport, $fileName, \Maatwebsite\Excel\Excel::XLSX, [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            ]);
         } catch (\Exception $e) {
             Log::error('Excel Export Error: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengexport Excel: ' . $e->getMessage());
+            Log::error('Stack trace: ' . $e->getTraceAsString());
+
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengexport Excel. Silakan coba lagi.');
         }
     }
 

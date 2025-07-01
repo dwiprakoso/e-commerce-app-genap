@@ -1,26 +1,33 @@
 <?php
 
-// File: app/Exports/PemesananExport.php
 namespace App\Exports;
 
 use App\Models\Pesan;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
+use Illuminate\Support\Facades\Log;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 use Maatwebsite\Excel\Concerns\WithStyles;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use PhpOffice\PhpSpreadsheet\Style\Border;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 class PemesananExport implements FromCollection, WithHeadings, WithMapping, WithStyles, WithColumnWidths
 {
+    private $no = 1;
+
     public function collection()
     {
-        return Pesan::with(['member', 'paketwisata'])
-            ->orderBy('created_at', 'desc')
-            ->get();
+        try {
+            return Pesan::with(['member', 'paketwisata'])
+                ->orderBy('created_at', 'desc')
+                ->get();
+        } catch (\Exception $e) {
+            Log::error('Error fetching data for export: ' . $e->getMessage());
+            return collect([]); // Return empty collection if error
+        }
     }
 
     public function headings(): array
@@ -40,61 +47,79 @@ class PemesananExport implements FromCollection, WithHeadings, WithMapping, With
 
     public function map($pemesanan): array
     {
-        static $no = 1;
-
-        return [
-            $no++,
-            $pemesanan->member ? $pemesanan->member->name : 'Member tidak ditemukan',
-            $pemesanan->member ? $pemesanan->member->email : '-',
-            $pemesanan->paketwisata ? $pemesanan->paketwisata->title : 'Paket tidak ditemukan',
-            $pemesanan->jumlah_orang . ' orang',
-            'Rp. ' . number_format($pemesanan->total_harga, 0, ',', '.'),
-            ucfirst($pemesanan->status),
-            $pemesanan->bukti_bayar ? 'Ada' : 'Belum ada',
-            $pemesanan->created_at->format('d/m/Y H:i'),
-        ];
+        try {
+            return [
+                $this->no++,
+                $pemesanan->member ? $pemesanan->member->name : 'Member tidak ditemukan',
+                $pemesanan->member ? $pemesanan->member->email : '-',
+                $pemesanan->paketwisata ? $pemesanan->paketwisata->title : 'Paket tidak ditemukan',
+                $pemesanan->jumlah_orang . ' orang',
+                'Rp. ' . number_format($pemesanan->total_harga, 0, ',', '.'),
+                ucfirst($pemesanan->status),
+                $pemesanan->bukti_bayar ? 'Ada' : 'Belum ada',
+                $pemesanan->created_at ? $pemesanan->created_at->format('d/m/Y H:i') : '-',
+            ];
+        } catch (\Exception $e) {
+            Log::error('Error mapping data: ' . $e->getMessage());
+            return [
+                $this->no++,
+                'Error',
+                'Error',
+                'Error',
+                'Error',
+                'Error',
+                'Error',
+                'Error',
+                'Error',
+            ];
+        }
     }
 
     public function styles(Worksheet $sheet)
     {
-        return [
-            // Style untuk header
-            1 => [
-                'font' => [
-                    'bold' => true,
-                    'size' => 12,
-                    'color' => [
-                        'rgb' => 'FFFFFF',
+        try {
+            return [
+                // Style untuk header
+                1 => [
+                    'font' => [
+                        'bold' => true,
+                        'size' => 12,
+                        'color' => [
+                            'rgb' => 'FFFFFF',
+                        ],
+                    ],
+                    'alignment' => [
+                        'horizontal' => Alignment::HORIZONTAL_CENTER,
+                        'vertical' => Alignment::VERTICAL_CENTER,
+                    ],
+                    'fill' => [
+                        'fillType' => Fill::FILL_SOLID,
+                        'startColor' => [
+                            'rgb' => '4472C4',
+                        ],
+                    ],
+                    'borders' => [
+                        'allBorders' => [
+                            'borderStyle' => Border::BORDER_THIN,
+                        ],
                     ],
                 ],
-                'alignment' => [
-                    'horizontal' => Alignment::HORIZONTAL_CENTER,
-                    'vertical' => Alignment::VERTICAL_CENTER,
-                ],
-                'fill' => [
-                    'fillType' => Fill::FILL_SOLID,
-                    'startColor' => [
-                        'rgb' => '4472C4',
+                // Style untuk semua cell
+                'A:I' => [
+                    'alignment' => [
+                        'vertical' => Alignment::VERTICAL_CENTER,
+                    ],
+                    'borders' => [
+                        'allBorders' => [
+                            'borderStyle' => Border::BORDER_THIN,
+                        ],
                     ],
                 ],
-                'borders' => [
-                    'allBorders' => [
-                        'borderStyle' => Border::BORDER_THIN,
-                    ],
-                ],
-            ],
-            // Style untuk semua cell
-            'A:I' => [
-                'alignment' => [
-                    'vertical' => Alignment::VERTICAL_CENTER,
-                ],
-                'borders' => [
-                    'allBorders' => [
-                        'borderStyle' => Border::BORDER_THIN,
-                    ],
-                ],
-            ],
-        ];
+            ];
+        } catch (\Exception $e) {
+            Log::error('Error applying styles: ' . $e->getMessage());
+            return [];
+        }
     }
 
     public function columnWidths(): array
