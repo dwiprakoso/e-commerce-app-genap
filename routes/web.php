@@ -44,7 +44,6 @@ Route::prefix('member')->group(function () {
     Route::get('/video/{id}', [MemberDashboardController::class, 'detailVideo'])->name('member.video.show');
     // Galeri Routes
     Route::get('/galeri', [MemberDashboardController::class, 'gallery'])->name('member.galeri.index');
-    Route::get('/galeri/{id}', [MemberDashboardController::class, 'detailGallery'])->name('member.galeri.show');
 
     // Authenticated member routes
     Route::middleware('auth:member')->group(function () {
