@@ -24,23 +24,45 @@ class PemesananController extends Controller
     public function exportExcel()
     {
         try {
+            // Increase memory limit and execution time
+            ini_set('memory_limit', '512M');
+            ini_set('max_execution_time', 300);
+
             // Check if data exists
             $count = Pesan::count();
             if ($count == 0) {
                 return redirect()->back()->with('warning', 'Tidak ada data untuk diexport');
             }
 
+            Log::info('Starting Excel export with ' . $count . ' records');
+
+            // Test the export class first
+            $export = new PemesananExport();
+            $testCollection = $export->collection();
+
+            if ($testCollection->isEmpty()) {
+                return redirect()->back()->with('warning', 'Data kosong atau tidak dapat diambil');
+            }
+
             $fileName = 'pemesanan_' . date('Y-m-d_H-i-s') . '.xlsx';
 
-            // Use response()->download() for better error handling
-            return Excel::download(new PemesananExport, $fileName, \Maatwebsite\Excel\Excel::XLSX, [
-                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            ]);
+            Log::info('Excel export starting for file: ' . $fileName);
+
+            // Simplified download call
+            return Excel::download(new PemesananExport, $fileName);
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            Log::error('Excel Validation Error: ' . json_encode($e->failures()));
+            return redirect()->back()->with('error', 'Validasi Excel gagal: ' . implode(', ', $e->failures()));
+        } catch (\PhpOffice\PhpSpreadsheet\Exception $e) {
+            Log::error('PhpSpreadsheet Error: ' . $e->getMessage());
+            Log::error('Stack trace: ' . $e->getTraceAsString());
+            return redirect()->back()->with('error', 'Error PhpSpreadsheet: ' . $e->getMessage());
         } catch (\Exception $e) {
             Log::error('Excel Export Error: ' . $e->getMessage());
             Log::error('Stack trace: ' . $e->getTraceAsString());
+            Log::error('File: ' . $e->getFile() . ' Line: ' . $e->getLine());
 
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengexport Excel. Silakan coba lagi.');
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengexport Excel: ' . $e->getMessage());
         }
     }
 
