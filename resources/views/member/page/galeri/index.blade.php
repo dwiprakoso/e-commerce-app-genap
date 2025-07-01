@@ -128,3 +128,85 @@
         }
     </style>
 @endpush
+
+@push('scripts')
+    <script>
+        let galleries = @json($galleries);
+        let currentIndex = 0;
+
+        function openModal(id) {
+            const modal = document.getElementById('lightboxModal');
+            const modalImage = document.getElementById('modalImage');
+            const modalCaption = document.getElementById('modalCaption');
+
+            // Find the gallery item
+            const gallery = galleries.find(item => item.id == id);
+            currentIndex = galleries.findIndex(item => item.id == id);
+
+            if (gallery && gallery.image_url) {
+                modalImage.src = '/storage/' + gallery.image_url;
+                modalImage.alt = gallery.caption || '';
+                modalCaption.textContent = gallery.caption || '';
+
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('lightboxModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = 'auto';
+        }
+
+        function nextImage() {
+            if (currentIndex < galleries.length - 1) {
+                currentIndex++;
+                const gallery = galleries[currentIndex];
+                if (gallery.image_url) {
+                    const modalImage = document.getElementById('modalImage');
+                    const modalCaption = document.getElementById('modalCaption');
+
+                    modalImage.src = '/storage/' + gallery.image_url;
+                    modalImage.alt = gallery.caption || '';
+                    modalCaption.textContent = gallery.caption || '';
+                }
+            }
+        }
+
+        function prevImage() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                const gallery = galleries[currentIndex];
+                if (gallery.image_url) {
+                    const modalImage = document.getElementById('modalImage');
+                    const modalCaption = document.getElementById('modalCaption');
+
+                    modalImage.src = '/storage/' + gallery.image_url;
+                    modalImage.alt = gallery.caption || '';
+                    modalCaption.textContent = gallery.caption || '';
+                }
+            }
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('lightboxModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Close modal with escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            } else if (e.key === 'ArrowRight') {
+                nextImage();
+            } else if (e.key === 'ArrowLeft') {
+                prevImage();
+            }
+        });
+    </script>
+@endpush

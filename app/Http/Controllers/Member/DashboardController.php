@@ -136,18 +136,4 @@ class DashboardController extends Controller
 
         return view('member.page.galeri.index', compact('galleries'));
     }
-
-    // Fungsi untuk detail gallery
-    public function detailGallery($id)
-    {
-        $gallery = Gallery::findOrFail($id);
-
-        // Ambil gambar gallery lain (excluding current)
-        $galleryLainnya = Gallery::where('id', '!=', $id)
-            ->orderBy('created_at', 'desc')
-            ->take(6)
-            ->get();
-
-        return view('member.page.galeri.detail', compact('gallery', 'galleryLainnya'));
-    }
 }
