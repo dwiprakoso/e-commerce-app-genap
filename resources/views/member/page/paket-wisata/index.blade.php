@@ -18,11 +18,16 @@
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                     @foreach ($paketWisata as $paket)
                         <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition duration-300">
-                            <!-- Image Placeholder -->
-                            <div class="h-48 bg-gradient-to-r from-blue-400 to-purple-500 relative">
-                                <div class="absolute inset-0 flex items-center justify-center">
-                                    <i class="fas fa-mountain text-white text-4xl opacity-50"></i>
-                                </div>
+                            <div class="h-48 bg-gradient-to-r from-blue-400 to-purple-500 relative overflow-hidden">
+                                @if ($paket->image_url)
+                                    <img src="{{ asset('storage/' . $paket->image_url) }}" alt="{{ $paket->title }}"
+                                        class="w-full h-full object-cover">
+                                @else
+                                    <div class="w-full h-full flex items-center justify-center">
+                                        <i class="fas fa-image text-6xl text-white/50"></i>
+                                    </div>
+                                @endif
+
                                 <!-- Price Badge -->
                                 <div class="absolute bottom-4 left-4">
                                     <span class="bg-white text-blue-600 px-3 py-2 rounded-lg font-bold text-lg shadow-md">
@@ -30,7 +35,6 @@
                                     </span>
                                 </div>
                             </div>
-
                             <div class="p-6">
                                 <h3 class="text-xl font-bold text-gray-800 mb-3">{{ $paket->title }}</h3>
                                 <p class="text-gray-600 mb-4 line-clamp-3">{{ $paket->description }}</p>

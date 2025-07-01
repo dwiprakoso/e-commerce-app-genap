@@ -28,9 +28,14 @@
                 <div class="space-y-4">
                     <!-- Main Image -->
                     <div class="h-96 bg-gradient-to-r from-blue-400 to-purple-500 rounded-lg relative overflow-hidden">
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <i class="fas fa-mountain text-white text-6xl opacity-50"></i>
-                        </div>
+                        @if ($paket->image_url)
+                            <img src="{{ asset('storage/' . $paket->image_url) }}" alt="{{ $paket->title }}"
+                                class="w-full h-full object-cover">
+                        @else
+                            <div class="w-full h-full flex items-center justify-center">
+                                <i class="fas fa-image text-6xl text-white/50"></i>
+                            </div>
+                        @endif
                         <!-- Status Badge -->
                         <div class="absolute top-4 right-4">
                             @if ($paket->status == 'publish')
@@ -134,13 +139,19 @@
                     @foreach ($paketLainnya as $paketLain)
                         <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition duration-300">
                             <!-- Image Placeholder -->
-                            <div class="h-48 bg-gradient-to-r from-green-400 to-blue-500 relative">
-                                <div class="absolute inset-0 flex items-center justify-center">
-                                    <i class="fas fa-mountain text-white text-4xl opacity-50"></i>
-                                </div>
+                            <div class="h-48 bg-gradient-to-r from-blue-400 to-purple-500 relative overflow-hidden">
+                                @if ($paketLain->image_url)
+                                    <img src="{{ asset('storage/' . $paketLain->image_url) }}"
+                                        alt="{{ $paketLain->title }}" class="w-full h-full object-cover">
+                                @else
+                                    <div class="w-full h-full flex items-center justify-center">
+                                        <i class="fas fa-image text-6xl text-white/50"></i>
+                                    </div>
+                                @endif
+
                                 <!-- Price Badge -->
                                 <div class="absolute bottom-4 left-4">
-                                    <span class="bg-white text-blue-600 px-3 py-2 rounded-lg font-bold shadow-md">
+                                    <span class="bg-white text-blue-600 px-3 py-2 rounded-lg font-bold text-lg shadow-md">
                                         Rp {{ number_format($paketLain->price, 0, ',', '.') }}
                                     </span>
                                 </div>
