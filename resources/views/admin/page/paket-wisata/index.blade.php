@@ -38,6 +38,7 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
+                                    <th>Gambar</th>
                                     <th>Judul</th>
                                     <th>Deskripsi</th>
                                     <th>Harga</th>
@@ -51,6 +52,18 @@
                                 @forelse ($paketwisatas as $paketwisata)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
+                                        <td>
+                                            @if ($paketwisata->image_url)
+                                                <img src="{{ asset('storage/' . $paketwisata->image_url) }}"
+                                                    alt="{{ $paketwisata->title }}" class="img-thumbnail"
+                                                    style="width: 60px; height: 60px; object-fit: cover;">
+                                            @else
+                                                <div class="text-center text-muted"
+                                                    style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border: 1px dashed #ccc;">
+                                                    <i class="fas fa-image"></i>
+                                                </div>
+                                            @endif
+                                        </td>
                                         <td>{{ $paketwisata->title }}</td>
                                         <td>{{ Str::limit($paketwisata->description, 50) }}</td>
                                         <td>Rp {{ number_format($paketwisata->price, 0, ',', '.') }}</td>

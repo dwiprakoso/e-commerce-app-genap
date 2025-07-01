@@ -14,6 +14,7 @@ class PaketWisata extends Model
     protected $fillable = [
         'title',
         'description',
+        'image_url',
         'price',
         'start_date',
         'end_date',

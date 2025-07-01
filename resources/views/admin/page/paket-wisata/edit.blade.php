@@ -36,9 +36,12 @@
 
                         <div class="form-group">
                             <label for="price">Harga (Rp) <span class="text-danger">*</span></label>
-                            <input type="number" name="price" class="form-control @error('price') is-invalid @enderror"
-                                id="price" placeholder="Masukkan harga paket..." required min="0" step="1000"
-                                value="{{ old('price', $paketwisata->price) }}">
+                            <input type="text" name="price" class="form-control @error('price') is-invalid @enderror"
+                                id="price" placeholder="Masukkan harga paket..." required
+                                value="{{ old('price', isset($paketwisata) ? $paketwisata->price : '') }}"
+                                pattern="[0-9,.]+" inputmode="numeric">
+                            <small class="form-text text-muted">Masukkan harga dalam Rupiah (contoh: 800000 atau
+                                800.000)</small>
                             @error('price')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -79,6 +82,17 @@
                                 </div>
                             </div>
                         @endif
+                        <div class="form-group">
+                            <label for="image">Ganti Gambar (Opsional)</label>
+                            <input type="file" name="image"
+                                class="form-control-file @error('image') is-invalid @enderror" id="image"
+                                accept="image/*">
+                            <small class="form-text text-muted">Format: jpeg, png, jpg, gif. Maksimal 2MB. Kosongkan jika
+                                tidak ingin mengganti gambar.</small>
+                            @error('image')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
 
                         <div class="form-group">
                             <label for="status">Status <span class="text-danger">*</span></label>
@@ -123,6 +137,7 @@
     </div>
     <!-- End of Main Content -->
 
+    // Script yang diperbaiki untuk create.blade.php dan edit.blade.php
     <script>
         // Preview image before upload
         document.getElementById('image').addEventListener('change', function(e) {
@@ -137,6 +152,9 @@
             }
         });
 
+        // Set minimum date to today for start_date (hanya untuk create)
+        document.getElementById('start_date').min = new Date().toISOString().split('T')[0];
+
         // Update end_date minimum when start_date changes
         document.getElementById('start_date').addEventListener('change', function() {
             const startDate = this.value;
@@ -149,34 +167,72 @@
             }
         });
 
-        // Set initial min for end_date
+        // Set initial min for end_date (untuk edit)
         const currentStartDate = document.getElementById('start_date').value;
         if (currentStartDate) {
             document.getElementById('end_date').min = currentStartDate;
         }
 
-        // Format price input with thousand separators
-        document.getElementById('price').addEventListener('input', function(e) {
-            let value = e.target.value;
-            // Remove non-digits
-            value = value.replace(/\D/g, '');
-            // Add thousand separators
-            if (value) {
-                e.target.value = parseInt(value).toLocaleString('id-ID');
+        // Price input handling - PERBAIKAN UTAMA
+        const priceInput = document.getElementById('price');
+        let isFormatting = false;
+
+        // Format price display with thousand separators
+        function formatPrice(value) {
+            // Remove all non-digits
+            const numericValue = value.toString().replace(/\D/g, '');
+            if (numericValue === '') return '';
+            return parseInt(numericValue).toLocaleString('id-ID');
+        }
+
+        // Handle input event
+        priceInput.addEventListener('input', function(e) {
+            if (isFormatting) return;
+
+            isFormatting = true;
+            const cursorPosition = e.target.selectionStart;
+            const oldValue = e.target.value;
+            const numericValue = oldValue.replace(/\D/g, '');
+
+            if (numericValue) {
+                const formattedValue = formatPrice(numericValue);
+                e.target.value = formattedValue;
+
+                // Restore cursor position
+                const newCursorPosition = cursorPosition + (formattedValue.length - oldValue.length);
+                setTimeout(() => {
+                    e.target.setSelectionRange(newCursorPosition, newCursorPosition);
+                }, 0);
+            }
+
+            isFormatting = false;
+        });
+
+        // Handle focus - remove formatting for easier editing
+        priceInput.addEventListener('focus', function(e) {
+            const numericValue = e.target.value.replace(/\D/g, '');
+            e.target.value = numericValue;
+        });
+
+        // Handle blur - add formatting back
+        priceInput.addEventListener('blur', function(e) {
+            if (e.target.value) {
+                e.target.value = formatPrice(e.target.value);
             }
         });
 
         // Remove formatting before form submission
-        document.querySelector('form').addEventListener('submit', function() {
+        document.querySelector('form').addEventListener('submit', function(e) {
             const priceInput = document.getElementById('price');
-            priceInput.value = priceInput.value.replace(/\D/g, '');
+            const numericValue = priceInput.value.replace(/\D/g, '');
+            priceInput.value = numericValue;
         });
 
-        // Format initial price value
+        // Format initial price value on page load (untuk edit)
         window.addEventListener('load', function() {
             const priceInput = document.getElementById('price');
-            if (priceInput.value) {
-                priceInput.value = parseInt(priceInput.value).toLocaleString('id-ID');
+            if (priceInput.value && !priceInput.value.includes('.')) {
+                priceInput.value = formatPrice(priceInput.value);
             }
         });
     </script>

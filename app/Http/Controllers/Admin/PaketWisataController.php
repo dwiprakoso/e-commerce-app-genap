@@ -22,9 +22,15 @@ class PaketWisataController extends Controller
 
     public function store(Request $request)
     {
+        // Clean price input before validation
+        $request->merge([
+            'price' => preg_replace('/[^\d]/', '', $request->price)
+        ]);
+
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'price' => 'required|numeric|min:0',
             'start_date' => 'required|date|after_or_equal:today',
             'end_date' => 'required|date|after:start_date',
@@ -33,6 +39,9 @@ class PaketWisataController extends Controller
             'title.required' => 'Judul paket wisata wajib diisi.',
             'title.max' => 'Judul paket wisata maksimal 255 karakter.',
             'description.required' => 'Deskripsi paket wisata wajib diisi.',
+            'image.image' => 'File harus berupa gambar.',
+            'image.mimes' => 'Format gambar harus jpeg, png, jpg, atau gif.',
+            'image.max' => 'Ukuran gambar maksimal 2MB.',
             'price.required' => 'Harga paket wisata wajib diisi.',
             'price.numeric' => 'Harga harus berupa angka.',
             'price.min' => 'Harga minimal 0.',
@@ -44,12 +53,22 @@ class PaketWisataController extends Controller
             'status.in' => 'Status harus draft atau publish.'
         ]);
 
+
         try {
+            $imageUrl = null;
+
+            // Handle image upload
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $imageUrl = $image->storeAs('paket-wisata', $imageName, 'public');
+            }
 
             // Create paket wisata
             PaketWisata::create([
                 'title' => $request->title,
                 'description' => $request->description,
+                'image_url' => $imageUrl,
                 'price' => $request->price,
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
@@ -65,6 +84,7 @@ class PaketWisataController extends Controller
         }
     }
 
+
     public function edit($id)
     {
         $paketwisata = PaketWisata::findOrFail($id);
@@ -75,9 +95,15 @@ class PaketWisataController extends Controller
     {
         $paketwisata = PaketWisata::findOrFail($id);
 
+        // Clean price input before validation
+        $request->merge([
+            'price' => preg_replace('/[^\d]/', '', $request->price)
+        ]);
+
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'price' => 'required|numeric|min:0',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after:start_date',
@@ -86,6 +112,9 @@ class PaketWisataController extends Controller
             'title.required' => 'Judul paket wisata wajib diisi.',
             'title.max' => 'Judul paket wisata maksimal 255 karakter.',
             'description.required' => 'Deskripsi paket wisata wajib diisi.',
+            'image.image' => 'File harus berupa gambar.',
+            'image.mimes' => 'Format gambar harus jpeg, png, jpg, atau gif.',
+            'image.max' => 'Ukuran gambar maksimal 2MB.',
             'price.required' => 'Harga paket wisata wajib diisi.',
             'price.numeric' => 'Harga harus berupa angka.',
             'price.min' => 'Harga minimal 0.',
@@ -96,12 +125,27 @@ class PaketWisataController extends Controller
             'status.in' => 'Status harus draft atau publish.'
         ]);
 
+
         try {
+            $imageUrl = $paketwisata->image_url;
+
+            // Handle image upload
+            if ($request->hasFile('image')) {
+                // Delete old image if exists
+                if ($paketwisata->image_url && Storage::disk('public')->exists($paketwisata->image_url)) {
+                    Storage::disk('public')->delete($paketwisata->image_url);
+                }
+
+                $image = $request->file('image');
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $imageUrl = $image->storeAs('paket-wisata', $imageName, 'public');
+            }
 
             // Update paket wisata
             $paketwisata->update([
                 'title' => $request->title,
                 'description' => $request->description,
+                'image_url' => $imageUrl,
                 'price' => $request->price,
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
