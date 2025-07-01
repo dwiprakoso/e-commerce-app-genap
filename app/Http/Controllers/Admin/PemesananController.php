@@ -4,7 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Pesan;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\PemesananExport;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PemesananController extends Controller
 {
@@ -13,7 +17,37 @@ class PemesananController extends Controller
         $pemesanans = Pesan::with(['member', 'paketwisata'])
             ->orderBy('created_at', 'desc')
             ->paginate(10);
+
         return view('admin.page.pemesanan.index', compact('pemesanans'));
+    }
+
+    public function exportExcel()
+    {
+        try {
+            $fileName = 'pemesanan_' . date('Y-m-d_H-i-s') . '.xlsx';
+            return Excel::download(new PemesananExport, $fileName);
+        } catch (\Exception $e) {
+            Log::error('Excel Export Error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengexport Excel: ' . $e->getMessage());
+        }
+    }
+
+    public function exportPdf()
+    {
+        try {
+            $pemesanans = Pesan::with(['member', 'paketwisata'])
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            $pdf = Pdf::loadView('admin.exports.pemesanan_pdf', compact('pemesanans'));
+            $pdf->setPaper('A4', 'landscape');
+
+            $fileName = 'pemesanan_' . date('Y-m-d_H-i-s') . '.pdf';
+            return $pdf->download($fileName);
+        } catch (\Exception $e) {
+            Log::error('PDF Export Error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengexport PDF: ' . $e->getMessage());
+        }
     }
 
     public function edit($id)

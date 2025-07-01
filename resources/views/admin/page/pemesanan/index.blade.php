@@ -58,31 +58,12 @@
             <!-- Search and Filter -->
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <form method="GET" action="{{ route('admin.pemesanan.index') }}"
-                                class="form-inline float-right">
-                                <input type="text" name="search" class="form-control mr-2"
-                                    placeholder="Cari member atau paket..." value="{{ request('search') }}">
-                                <select name="status" class="form-control mr-2">
-                                    <option value="all">Semua Status</option>
-                                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending
-                                    </option>
-                                    <option value="dibayar" {{ request('status') == 'dibayar' ? 'selected' : '' }}>Dibayar
-                                    </option>
-                                    <option value="diverifikasi"
-                                        {{ request('status') == 'diverifikasi' ? 'selected' : '' }}>Diverifikasi</option>
-                                    <option value="selesai" {{ request('status') == 'selesai' ? 'selected' : '' }}>Selesai
-                                    </option>
-                                    <option value="dibatalkan" {{ request('status') == 'dibatalkan' ? 'selected' : '' }}>
-                                        Dibatalkan</option>
-                                </select>
-                                <button type="submit" class="btn btn-info">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
+                    <a href="{{ route('admin.pemesanan.export.excel') }}" class="btn btn-success">
+                        <i class="fas fa-file-excel"></i> Export Excel
+                    </a>
+                    <a href="{{ route('admin.pemesanan.export.pdf') }}" class="btn btn-danger ml-2">
+                        <i class="fas fa-file-pdf"></i> Export PDF
+                    </a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">

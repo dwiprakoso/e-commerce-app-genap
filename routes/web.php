@@ -105,6 +105,8 @@ Route::prefix('admin')->group(function () {
             Route::get('/', [PemesananController::class, 'index'])->name('admin.pemesanan.index');
             Route::get('/edit/{id}', [PemesananController::class, 'edit'])->name('admin.pemesanan.edit');
             Route::put('/update/{id}', [PemesananController::class, 'update'])->name('admin.pemesanan.update');
+            Route::get('/export-excel', [PemesananController::class, 'exportExcel'])->name('admin.pemesanan.export.excel');
+            Route::get('/export-pdf', [PemesananController::class, 'exportPdf'])->name('admin.pemesanan.export.pdf');
         });
 
         Route::prefix('member')->group(function () {
