@@ -56,20 +56,11 @@
                                         <i class="fas fa-info-circle mr-2"></i>
                                         Detail
                                     </a>
-                                    @if ($paket->status == 'publish')
-                                        <button
-                                            class="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-green-700 transition duration-200">
-                                            <i class="fas fa-shopping-cart mr-2"></i>
-                                            Pesan
-                                        </button>
-                                    @else
-                                        <button
-                                            class="flex-1 bg-gray-400 text-white py-2 px-4 rounded-lg font-medium cursor-not-allowed"
-                                            disabled>
-                                            <i class="fas fa-ban mr-2"></i>
-                                            Draft
-                                        </button>
-                                    @endif
+                                    <a href="{{ route('member.paket-wisata.pesan', $paket->id) }}"
+                                        class="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-green-700 transition duration-200 text-center">
+                                        <i class="fas fa-shopping-cart mr-2"></i>
+                                        Pesan
+                                    </a>
                                 </div>
                             </div>
                         </div>

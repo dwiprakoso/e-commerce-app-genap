@@ -109,30 +109,12 @@
 
                     <!-- Action Buttons -->
                     <div class="flex space-x-4">
-                        @if ($paket->status == 'publish')
-                            <button
-                                class="flex-1 bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 transition duration-200">
-                                <i class="fas fa-shopping-cart mr-2"></i>
-                                Pesan Sekarang
-                            </button>
-                            <button
-                                class="bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition duration-200">
-                                <i class="fas fa-heart mr-2"></i>
-                                Simpan
-                            </button>
-                        @else
-                            <button
-                                class="flex-1 bg-gray-400 text-white py-3 px-6 rounded-lg font-semibold cursor-not-allowed"
-                                disabled>
-                                <i class="fas fa-ban mr-2"></i>
-                                Paket Tidak Tersedia
-                            </button>
-                        @endif
-                        <button
-                            class="bg-gray-200 text-gray-700 py-3 px-6 rounded-lg font-semibold hover:bg-gray-300 transition duration-200">
-                            <i class="fas fa-share mr-2"></i>
-                            Bagikan
-                        </button>
+                        <a href="{{ route('member.paket-wisata.pesan', $paket->id) }}"
+                            class="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-green-700 transition duration-200 text-center">
+                            <i class="fas fa-shopping-cart mr-2"></i>
+                            Pesan
+                        </a>
+
                     </div>
                 </div>
             </div>

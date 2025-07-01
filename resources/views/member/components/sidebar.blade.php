@@ -32,9 +32,9 @@
                 @else
                     <div class="flex items-center space-x-3">
                         <span class="text-gray-700">Halo, {{ Auth::guard('member')->user()->name }}!</span>
-                        <a href="{{ route('member.home') }}"
+                        <a href="{{ route('member.pesanan') }}"
                             class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
-                            Dashboard
+                            Pesanan Saya
                         </a>
                         <form action="{{ route('member.logout') }}" method="POST" class="inline">
                             @csrf

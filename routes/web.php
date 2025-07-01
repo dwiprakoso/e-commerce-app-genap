@@ -47,6 +47,9 @@ Route::prefix('member')->group(function () {
 
     // Authenticated member routes
     Route::middleware('auth:member')->group(function () {
+        Route::get('/paket-wisata/{id}/pesan', [MemberController::class, 'formPesan'])->name('member.paket-wisata.pesan');
+        Route::post('/paket-wisata/{id}/pesan', [MemberController::class, 'storePesan'])->name('member.paket-wisata.store-pesan');
+        Route::get('/pesanan-saya', [MemberController::class, 'pesananSaya'])->name('member.pesanan');
 
         Route::post('/logout', [MemberAuthController::class, 'logout'])->name('member.logout');
     });
