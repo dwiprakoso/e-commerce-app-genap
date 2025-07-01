@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\User;
+use App\Models\Member;
+
 return [
     'defaults' => [
         'guard' => 'web',
@@ -21,12 +24,12 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => User::class,
         ],
 
         'members' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Member::class,
+            'model' => Member::class,
         ],
     ],
 

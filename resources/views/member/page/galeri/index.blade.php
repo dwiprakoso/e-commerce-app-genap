@@ -10,28 +10,12 @@
         </div>
     </section>
 
-    <!-- Search Section -->
-    <section class="py-8 bg-white border-b">
-        <div class="container mx-auto px-4">
-            <form method="GET" action="{{ route('member.gallery.index') }}" class="max-w-md mx-auto">
-                <div class="relative">
-                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari foto..."
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
-                    <button type="submit"
-                        class="absolute right-2 top-2 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
-            </form>
-        </div>
-    </section>
-
     <!-- Gallery Section -->
     <section class="py-16 bg-gray-50">
         <div class="container mx-auto px-4">
-            @if ($gallery->count() > 0)
+            @if ($galleries->count() > 0)
                 <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    @foreach ($gallery as $item)
+                    @foreach ($galleries as $item)
                         <div class="group cursor-pointer" onclick="openModal('{{ $item->id }}')">
                             <div
                                 class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition duration-300 transform group-hover:scale-105">
@@ -114,7 +98,7 @@
                         @endif
                     </p>
                     @if (request('search'))
-                        <a href="{{ route('member.gallery.index') }}"
+                        <a href="{{ route('member.galeri.index') }}"
                             class="bg-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-purple-700 transition">
                             Lihat Semua Foto
                         </a>
@@ -143,77 +127,4 @@
             aspect-ratio: 1 / 1;
         }
     </style>
-@endpush
-
-@push('scripts')
-    <script>
-        let currentImageIndex = 0;
-        let galleryData = @json(
-            $gallery->map(function ($item) {
-                return [
-                    'id' => $item->id,
-                    'image_url' => $item->image_url ? asset('storage/' . $item->image_url) : null,
-                    'caption' => $item->caption,
-                    'created_at' => \Carbon\Carbon::parse($item->created_at)->format('d M Y'),
-                ];
-            }));
-
-        function openModal(imageId) {
-            const index = galleryData.findIndex(item => item.id == imageId);
-            if (index !== -1) {
-                currentImageIndex = index;
-                showImage();
-                document.getElementById('lightboxModal').classList.remove('hidden');
-                document.getElementById('lightboxModal').classList.add('flex');
-                document.body.style.overflow = 'hidden';
-            }
-        }
-
-        function closeModal() {
-            document.getElementById('lightboxModal').classList.add('hidden');
-            document.getElementById('lightboxModal').classList.remove('flex');
-            document.body.style.overflow = 'auto';
-        }
-
-        function showImage() {
-            const currentImage = galleryData[currentImageIndex];
-            if (currentImage.image_url) {
-                document.getElementById('modalImage').src = currentImage.image_url;
-                document.getElementById('modalImage').alt = currentImage.caption || '';
-            }
-            document.getElementById('modalCaption').innerHTML =
-                `<p class="text-lg font-medium">${currentImage.caption || 'Tanpa keterangan'}</p>
-                 <p class="text-sm text-gray-300 mt-1">${currentImage.created_at}</p>`;
-        }
-
-        function nextImage() {
-            if (currentImageIndex < galleryData.length - 1) {
-                currentImageIndex++;
-                showImage();
-            }
-        }
-
-        function prevImage() {
-            if (currentImageIndex > 0) {
-                currentImageIndex--;
-                showImage();
-            }
-        }
-
-        // Keyboard navigation
-        document.addEventListener('keydown', function(e) {
-            if (!document.getElementById('lightboxModal').classList.contains('hidden')) {
-                if (e.key === 'Escape') closeModal();
-                if (e.key === 'ArrowRight') nextImage();
-                if (e.key === 'ArrowLeft') prevImage();
-            }
-        });
-
-        // Close modal when clicking outside image
-        document.getElementById('lightboxModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
-        });
-    </script>
 @endpush

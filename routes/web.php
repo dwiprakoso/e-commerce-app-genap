@@ -12,6 +12,9 @@ use App\Http\Controllers\Member\AuthController as MemberAuthController;
 use App\Http\Controllers\Member\DashboardController as MemberDashboardController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/login', function () {
+    return redirect()->route('member.login');
+})->name('login');
 // Member Routes (Public)
 Route::get('/', [MemberDashboardController::class, 'home'])->name('member.home');
 
@@ -30,21 +33,21 @@ Route::prefix('member')->group(function () {
         Route::get('/auth/{provider}', [MemberAuthController::class, 'redirectToProvider'])->name('member.social.redirect');
         Route::get('/auth/{provider}/callback', [MemberAuthController::class, 'handleProviderCallback'])->name('member.social.callback');
     });
+    // Paket Wisata Routes
+    Route::get('/paket-wisata', [MemberDashboardController::class, 'paketWisata'])->name('member.paket-wisata.index');
+    Route::get('/paket-wisata/{id}', [MemberDashboardController::class, 'detailPaketWisata'])->name('member.paket-wisata.show');
+    // Berita Routes
+    Route::get('/berita', [MemberDashboardController::class, 'berita'])->name('member.berita.index');
+    Route::get('/berita/{id}', [MemberDashboardController::class, 'detailBerita'])->name('member.berita.show');
+    // Video Routes
+    Route::get('/video', [MemberDashboardController::class, 'video'])->name('member.video.index');
+    Route::get('/video/{id}', [MemberDashboardController::class, 'detailVideo'])->name('member.video.show');
+    // Galeri Routes
+    Route::get('/galeri', [MemberDashboardController::class, 'gallery'])->name('member.galeri.index');
+    Route::get('/galeri/{id}', [MemberDashboardController::class, 'detailGallery'])->name('member.galeri.show');
 
     // Authenticated member routes
     Route::middleware('auth:member')->group(function () {
-        // Paket Wisata Routes
-        Route::get('/paket-wisata', [MemberDashboardController::class, 'paketWisata'])->name('member.paket-wisata.index');
-        Route::get('/paket-wisata/{id}', [MemberDashboardController::class, 'detailPaketWisata'])->name('member.paket-wisata.show');
-        // Berita Routes
-        Route::get('/berita', [MemberDashboardController::class, 'berita'])->name('member.berita.index');
-        Route::get('/berita/{id}', [MemberDashboardController::class, 'detailBerita'])->name('member.berita.show');
-        // Video Routes
-        Route::get('/video', [MemberDashboardController::class, 'video'])->name('member.video.index');
-        Route::get('/video/{id}', [MemberDashboardController::class, 'detailVideo'])->name('member.video.show');
-        // Galeri Routes
-        Route::get('/galeri', [MemberDashboardController::class, 'gallery'])->name('member.galeri.index');
-        Route::get('/galeri/{id}', [MemberDashboardController::class, 'detailGallery'])->name('member.galeri.show');
 
         Route::post('/logout', [MemberAuthController::class, 'logout'])->name('member.logout');
     });
