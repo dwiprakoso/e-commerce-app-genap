@@ -63,7 +63,7 @@ Route::prefix('admin')->group(function () {
 
     // Protected Admin Routes
     Route::middleware('admin')->group(function () {
-        Route::get('/', [DashboardController::class, 'index'])->name('admin.index');
+        Route::get('/', [PemesananController::class, 'index'])->name('admin.index');
 
         Route::prefix('paket-wisata')->group(function () {
             Route::get('/', [PaketWisataController::class, 'index'])->name('admin.paket-wisata.index');
