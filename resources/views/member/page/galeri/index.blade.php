@@ -30,14 +30,6 @@
                                             <i class="fas fa-image text-white text-4xl opacity-50"></i>
                                         </div>
                                     @endif
-
-                                    <!-- Overlay -->
-                                    <div
-                                        class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition duration-300 flex items-center justify-center">
-                                        <div class="opacity-0 group-hover:opacity-100 transition duration-300">
-                                            <i class="fas fa-search-plus text-white text-2xl"></i>
-                                        </div>
-                                    </div>
                                 </div>
 
                                 <!-- Caption -->
