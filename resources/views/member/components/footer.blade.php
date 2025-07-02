@@ -15,10 +15,11 @@
             <div>
                 <h4 class="text-lg font-semibold mb-4">Menu</h4>
                 <ul class="space-y-2 text-gray-400">
-                    <li><a href="#home" class="hover:text-white transition">Beranda</a></li>
-                    <li><a href="#paket" class="hover:text-white transition">Paket Wisata</a></li>
-                    <li><a href="#gallery" class="hover:text-white transition">Galeri</a></li>
-                    <li><a href="#berita" class="hover:text-white transition">Berita</a></li>
+                    <li><a href="{{ route('member.home') }}" class="hover:text-white transition">Beranda</a></li>
+                    <li><a href="{{ route('member.paket-wisata.index') }}" class="hover:text-white transition">Paket
+                            Wisata</a></li>
+                    <li><a href="{{ route('member.galeri.index') }}" class="hover:text-white transition">Galeri</a></li>
+                    <li><a href="{{ route('member.berita.index') }}" class="hover:text-white transition">Berita</a></li>
                 </ul>
             </div>
 
