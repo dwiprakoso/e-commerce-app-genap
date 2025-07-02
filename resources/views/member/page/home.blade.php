@@ -86,40 +86,39 @@
                             <div class="relative group cursor-pointer">
                                 <div class="relative">
                                     <div class="h-48 bg-gradient-to-r from-red-400 to-purple-500 relative overflow-hidden">
-                                        @if ($video->thumbnail)
-                                            {{-- Jika ada thumbnail yang di-upload --}}
-                                            <img src="{{ asset('storage/' . $video->thumbnail) }}"
-                                                alt="{{ $video->title }}" class="w-full h-full object-cover">
-                                        @elseif (str_contains($video->url, 'youtube.com') || str_contains($video->url, 'youtu.be'))
-                                            {{-- Jika tidak ada thumbnail tapi video dari YouTube --}}
+                                        @if (str_contains($video->url, 'youtube.com') || str_contains($video->url, 'youtu.be'))
                                             @php
                                                 $videoId = '';
+                                                // YouTube watch URL
                                                 if (str_contains($video->url, 'youtube.com/watch?v=')) {
-                                                    $videoId = substr($video->url, strpos($video->url, 'v=') + 2);
-                                                    $videoId = strpos($videoId, '&')
-                                                        ? substr($videoId, 0, strpos($videoId, '&'))
-                                                        : $videoId;
-                                                } elseif (str_contains($video->url, 'youtu.be/')) {
-                                                    $videoId = substr(
-                                                        $video->url,
-                                                        strpos($video->url, 'youtu.be/') + 9,
-                                                    );
-                                                    $videoId = strpos($videoId, '?')
-                                                        ? substr($videoId, 0, strpos($videoId, '?'))
-                                                        : $videoId;
+                                                    parse_str(parse_url($video->url, PHP_URL_QUERY), $params);
+                                                    $videoId = $params['v'] ?? '';
+                                                }
+                                                // YouTube short URL
+                                                elseif (str_contains($video->url, 'youtu.be/')) {
+                                                    $videoId = basename(parse_url($video->url, PHP_URL_PATH));
+                                                }
+                                                // YouTube embed URL
+                                                elseif (str_contains($video->url, 'youtube.com/embed/')) {
+                                                    $videoId = basename(parse_url($video->url, PHP_URL_PATH));
                                                 }
                                             @endphp
+
                                             @if ($videoId)
-                                                <img src="https://img.youtube.com/vi/{{ $videoId }}/maxresdefault.jpg"
-                                                    alt="{{ $video->title }}" class="w-full h-full object-cover">
+                                                <img src="https://img.youtube.com/vi/{{ $videoId }}/hqdefault.jpg"
+                                                    alt="{{ $video->title }}" class="w-full h-full object-cover"
+                                                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                                <!-- Fallback jika thumbnail gagal load -->
+                                                <div class="absolute inset-0 flex items-center justify-center"
+                                                    style="display: none;">
+                                                    <i class="fas fa-play-circle text-white text-6xl opacity-50"></i>
+                                                </div>
                                             @else
-                                                {{-- Fallback jika gagal mendapatkan video ID --}}
                                                 <div class="absolute inset-0 flex items-center justify-center">
                                                     <i class="fas fa-play-circle text-white text-6xl opacity-50"></i>
                                                 </div>
                                             @endif
                                         @else
-                                            {{-- Fallback untuk video non-YouTube tanpa thumbnail --}}
                                             <div class="absolute inset-0 flex items-center justify-center">
                                                 <i class="fas fa-play-circle text-white text-6xl opacity-50"></i>
                                             </div>
