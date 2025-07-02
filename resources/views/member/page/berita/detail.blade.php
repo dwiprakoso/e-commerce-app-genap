@@ -131,23 +131,6 @@
             </div>
         </section>
     @endif
-
-    <!-- Newsletter Section -->
-    <section class="bg-blue-600 text-white py-16">
-        <div class="container mx-auto px-4 text-center">
-            <h2 class="text-3xl font-bold mb-4">Dapatkan Update Terbaru</h2>
-            <p class="text-xl mb-8 max-w-2xl mx-auto">
-                Berlangganan newsletter kami untuk mendapatkan berita dan update terbaru
-            </p>
-            <div class="max-w-md mx-auto flex">
-                <input type="email" placeholder="Masukkan email Anda"
-                    class="flex-1 px-4 py-3 rounded-l-lg text-gray-900 focus:outline-none">
-                <button class="bg-green-600 text-white px-6 py-3 rounded-r-lg font-semibold hover:bg-green-700 transition">
-                    Berlangganan
-                </button>
-            </div>
-        </div>
-    </section>
 @endsection
 
 @push('styles')
