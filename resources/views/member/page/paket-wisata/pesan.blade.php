@@ -17,14 +17,16 @@
                 <div class="grid md:grid-cols-2 gap-8">
                     <!-- Detail Paket -->
                     <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                        @if ($paket->image_url)
-                            <img src="{{ asset('storage/' . $paket->image_url) }}" alt="{{ $paket->caption }}"
-                                class="w-full h-full object-cover transition duration-300 group-hover:scale-110">
-                        @else
-                            <div class="absolute inset-0 flex items-center justify-center">
-                                <i class="fas fa-image text-white text-4xl opacity-50"></i>
-                            </div>
-                        @endif
+                        <div class="h-48 bg-gradient-to-r from-blue-400 to-purple-500 relative">
+                            @if ($paket->image_url)
+                                <img src="{{ asset('storage/' . $paket->image_url) }}" alt="{{ $paket->title }}"
+                                    class="w-full h-full object-cover transition duration-300 group-hover:scale-110">
+                            @else
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <i class="fas fa-image text-white text-4xl opacity-50"></i>
+                                </div>
+                            @endif
+                        </div>
                         <div class="p-6">
                             <h3 class="text-2xl font-bold text-gray-800 mb-3">{{ $paket->title }}</h3>
                             <p class="text-gray-600 mb-4">{{ $paket->description }}</p>
