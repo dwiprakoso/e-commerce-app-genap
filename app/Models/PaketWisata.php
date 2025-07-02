@@ -27,4 +27,9 @@ class PaketWisata extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+    // Di Model PaketWisata.php
+    public function pesan()
+    {
+        return $this->hasMany(Pesan::class, 'paketwisata_id');
+    }
 }

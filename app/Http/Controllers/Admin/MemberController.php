@@ -20,11 +20,20 @@ class MemberController extends Controller
     {
         try {
             $member = Member::findOrFail($id);
+
+            // Cek apakah member memiliki data di tabel pesan
+            if ($member->pesan()->exists()) {
+                return redirect()->route('admin.member.index')
+                    ->with('error', 'Member tidak dapat dihapus karena masih memiliki data pemesanan!');
+            }
+
             $member->delete();
 
-            return redirect()->route('admin.member.index')->with('success', 'Member berhasil dihapus!');
+            return redirect()->route('admin.member.index')
+                ->with('success', 'Member berhasil dihapus!');
         } catch (\Exception $e) {
-            return redirect()->route('admin.member.index')->with('error', 'Gagal menghapus member!');
+            return redirect()->route('admin.member.index')
+                ->with('error', 'Gagal menghapus member!');
         }
     }
     // Tambahkan method ini di MemberController

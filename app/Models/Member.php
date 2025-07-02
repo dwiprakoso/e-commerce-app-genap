@@ -28,4 +28,9 @@ class Member extends Authenticatable
 
     // Jika menggunakan guard khusus
     protected $guard = 'member';
+    // Di Model Member.php
+    public function pesan()
+    {
+        return $this->hasMany(Pesan::class, 'member_id');
+    }
 }

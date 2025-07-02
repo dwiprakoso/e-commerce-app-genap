@@ -166,6 +166,12 @@ class PaketWisataController extends Controller
         try {
             $paketwisata = PaketWisata::findOrFail($id);
 
+            // Validasi: cek apakah paket wisata memiliki data di tabel pesan
+            if ($paketwisata->pesan()->exists()) {
+                return redirect()->route('admin.paket-wisata.index')
+                    ->with('error', 'Paket wisata tidak dapat dihapus karena masih memiliki data pemesanan!');
+            }
+
             // Delete image if exists
             if ($paketwisata->image_url && Storage::disk('public')->exists($paketwisata->image_url)) {
                 Storage::disk('public')->delete($paketwisata->image_url);
