@@ -35,7 +35,8 @@
                                 <!-- Image -->
                                 <div class="md:w-1/3 h-48 md:h-auto bg-gradient-to-r from-blue-400 to-purple-500 relative">
                                     <div class="absolute inset-0 flex items-center justify-center">
-                                        <i class="fas fa-mountain text-white text-4xl opacity-50"></i>
+                                        <img src="{{ asset('storage/' . $pesan->paketWisata->image_url) }}"
+                                            alt="{{ $pesan->paketWisata->image_url }}" class="w-full h-full object-cover">
                                     </div>
                                     <!-- Status Badge -->
                                     <div class="absolute top-4 right-4">
@@ -102,14 +103,14 @@
                                             <p class="text-sm text-gray-600 mb-2">
                                                 <i class="fas fa-receipt mr-2"></i>Bukti Bayar:
                                             </p>
-                                            <a href="{{ asset('uploads/bukti_bayar/' . $pesan->bukti_bayar) }}"
-                                                target="_blank"
+                                            <a href="{{ asset('storage/' . $pesan->bukti_bayar) }}" target="_blank"
                                                 class="inline-flex items-center text-blue-600 hover:text-blue-800 text-sm">
                                                 <i class="fas fa-eye mr-2"></i>
                                                 Lihat Bukti Bayar
                                             </a>
                                         </div>
                                     @endif
+
 
                                     <!-- Actions -->
                                     <div class="flex space-x-3">

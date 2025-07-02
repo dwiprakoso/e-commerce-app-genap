@@ -73,12 +73,12 @@ class MemberController extends Controller
         // Hitung total harga
         $totalHarga = $paket->price * $request->jumlah_orang;
 
-        // Upload bukti bayar
+        // Upload bukti bayar ke storage
         $buktiPayarName = null;
         if ($request->hasFile('bukti_bayar')) {
             $file = $request->file('bukti_bayar');
-            $buktiPayarName = 'bukti_bayar_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/bukti_bayar'), $buktiPayarName);
+            // Simpan ke folder storage/app/public/bukti_bayar
+            $buktiPayarName = $file->store('bukti_bayar', 'public'); // 'public' adalah disk storage yang diatur di config/filesystems.php
         }
 
         // Simpan data pesanan
@@ -94,6 +94,7 @@ class MemberController extends Controller
         return redirect()->route('member.pesanan')
             ->with('success', 'Pesanan berhasil dibuat! Pesanan Anda sedang diproses.');
     }
+
 
     public function pesananSaya()
     {

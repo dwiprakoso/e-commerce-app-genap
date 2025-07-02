@@ -181,27 +181,6 @@
         </section>
     @endif
 
-    <!-- Contact Section -->
-    <section class="bg-blue-600 text-white py-16">
-        <div class="container mx-auto px-4 text-center">
-            <h2 class="text-3xl font-bold mb-4">Butuh Bantuan?</h2>
-            <p class="text-xl mb-8 max-w-2xl mx-auto">
-                Tim customer service kami siap membantu Anda 24/7
-            </p>
-            <div class="space-x-4">
-                <a href="#"
-                    class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
-                    <i class="fas fa-phone mr-2"></i>
-                    Hubungi Kami
-                </a>
-                <a href="#"
-                    class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition">
-                    <i class="fas fa-whatsapp mr-2"></i>
-                    WhatsApp
-                </a>
-            </div>
-        </div>
-    </section>
 @endsection
 
 @push('styles')
