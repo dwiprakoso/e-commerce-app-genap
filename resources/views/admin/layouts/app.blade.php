@@ -65,7 +65,9 @@
     <!-- Page level custom scripts -->
     <script src="assets/js/demo/chart-area-demo.js"></script>
     <script src="assets/js/demo/chart-pie-demo.js"></script>
-
+    <!-- Tambahkan di section head atau sebelum closing body tag -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    @stack('scripts')
 </body>
 
 </html>
