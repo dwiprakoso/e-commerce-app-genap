@@ -85,16 +85,17 @@
                                     value="{{ $paket->price }}">
                             </div>
 
-                            <!-- Bukti Bayar -->
+                            <!-- Bukti Bayar (Optional) -->
                             <div class="mb-6">
                                 <label for="bukti_bayar" class="block text-sm font-medium text-gray-700 mb-2">
                                     <i class="fas fa-upload mr-2"></i>Upload Bukti Bayar
+                                    <span class="text-sm text-gray-500 font-normal">(Opsional)</span>
                                 </label>
                                 <input type="file" id="bukti_bayar" name="bukti_bayar" accept="image/*"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('bukti_bayar') border-red-500 @enderror"
                                     onchange="validateFile(this)">
                                 <p class="text-xs text-gray-500 mt-1">
-                                    Format: JPG, PNG, JPEG. Maksimal 2MB
+                                    Format: JPG, PNG, JPEG. Maksimal 2MB. Bisa diupload nanti di halaman pesanan.
                                 </p>
                                 @error('bukti_bayar')
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -110,7 +111,7 @@
                                     Silahkan transfer ke rekening: <br>
                                     <strong>Bank BCA: 1234567890</strong><br>
                                     <strong>A.n: PT Wisata Nusantara</strong><br>
-                                    Kemudian upload bukti transfer di atas.
+                                    Bukti transfer dapat diupload sekarang atau nanti di halaman pesanan.
                                 </p>
                             </div>
 
@@ -134,7 +135,8 @@
             </div>
         </div>
     </section>
-
+@endsection
+@push('scripts')
     <!-- Script langsung di dalam HTML -->
     <script>
         // Global variables
@@ -214,19 +216,14 @@
             console.log('File validation passed!');
         }
 
-        // Fungsi validasi form
+        // Fungsi validasi form (lebih sederhana karena bukti bayar tidak wajib)
         function validateForm() {
             const jumlahOrang = parseInt(document.getElementById('jumlah_orang').value);
-            const buktiFile = document.getElementById('bukti_bayar').files[0];
 
             if (!jumlahOrang || jumlahOrang < 1) {
                 alert('Jumlah orang minimal 1!');
                 document.getElementById('jumlah_orang').focus();
                 return false;
-            }
-
-            if (!buktiFile) {
-                return confirm('Anda belum upload bukti bayar. Lanjutkan?');
             }
 
             return true;
@@ -246,4 +243,4 @@
 
         console.log('=== SCRIPT INITIALIZATION COMPLETE ===');
     </script>
-@endsection
+@endpush

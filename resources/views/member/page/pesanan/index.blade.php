@@ -97,20 +97,69 @@
                                         </div>
                                     </div>
 
-                                    <!-- Bukti Bayar -->
+                                    <!-- Bukti Bayar Section -->
                                     @if ($pesan->bukti_bayar)
                                         <div class="mb-4">
                                             <p class="text-sm text-gray-600 mb-2">
                                                 <i class="fas fa-receipt mr-2"></i>Bukti Bayar:
                                             </p>
-                                            <a href="{{ asset('storage/' . $pesan->bukti_bayar) }}" target="_blank"
-                                                class="inline-flex items-center text-blue-600 hover:text-blue-800 text-sm">
-                                                <i class="fas fa-eye mr-2"></i>
-                                                Lihat Bukti Bayar
-                                            </a>
+                                            <div class="flex items-center space-x-3">
+                                                <a href="{{ asset('storage/' . $pesan->bukti_bayar) }}" target="_blank"
+                                                    class="inline-flex items-center text-blue-600 hover:text-blue-800 text-sm">
+                                                    <i class="fas fa-eye mr-2"></i>
+                                                    Lihat Bukti Bayar
+                                                </a>
+                                                <button onclick="showUploadForm({{ $pesan->id }})"
+                                                    class="inline-flex items-center text-orange-600 hover:text-orange-800 text-sm">
+                                                    <i class="fas fa-edit mr-2"></i>
+                                                    Ganti Bukti
+                                                </button>
+                                            </div>
+                                        </div>
+                                    @else
+                                        <div class="mb-4 p-3 bg-orange-50 rounded-lg border border-orange-200">
+                                            <p class="text-sm text-orange-700 mb-2">
+                                                <i class="fas fa-exclamation-triangle mr-2"></i>
+                                                Bukti pembayaran belum diupload
+                                            </p>
+                                            <button onclick="showUploadForm({{ $pesan->id }})"
+                                                class="bg-orange-500 text-white px-3 py-1 rounded text-sm hover:bg-orange-600 transition">
+                                                <i class="fas fa-upload mr-1"></i>
+                                                Upload Bukti Bayar
+                                            </button>
                                         </div>
                                     @endif
 
+                                    <!-- Form Upload Bukti Bayar (Hidden by default) -->
+                                    <div id="uploadForm{{ $pesan->id }}"
+                                        class="hidden mb-4 p-4 bg-gray-50 rounded-lg border">
+                                        <h4 class="font-semibold text-gray-800 mb-3">
+                                            <i class="fas fa-upload mr-2"></i>Upload Bukti Pembayaran
+                                        </h4>
+                                        <form action="{{ route('member.pesanan.upload-bukti', $pesan->id) }}"
+                                            method="POST" enctype="multipart/form-data">
+                                            @csrf
+                                            <div class="mb-3">
+                                                <input type="file" name="bukti_bayar" accept="image/*" required
+                                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                                <p class="text-xs text-gray-500 mt-1">
+                                                    Format: JPG, PNG, JPEG. Maksimal 2MB
+                                                </p>
+                                            </div>
+                                            <div class="flex space-x-3">
+                                                <button type="submit"
+                                                    class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition">
+                                                    <i class="fas fa-save mr-1"></i>
+                                                    Upload
+                                                </button>
+                                                <button type="button" onclick="hideUploadForm({{ $pesan->id }})"
+                                                    class="bg-gray-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-gray-600 transition">
+                                                    <i class="fas fa-times mr-1"></i>
+                                                    Batal
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
 
                                     <!-- Actions -->
                                     <div class="flex space-x-3">
@@ -150,4 +199,45 @@
             @endif
         </div>
     </section>
+
+    <!-- JavaScript untuk Upload Form -->
+
 @endsection
+@push('scripts')
+    <script>
+        function showUploadForm(pesanId) {
+            document.getElementById('uploadForm' + pesanId).classList.remove('hidden');
+        }
+
+        function hideUploadForm(pesanId) {
+            document.getElementById('uploadForm' + pesanId).classList.add('hidden');
+        }
+
+        // Validasi file upload
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInputs = document.querySelectorAll('input[type="file"]');
+
+            fileInputs.forEach(function(input) {
+                input.addEventListener('change', function() {
+                    const file = this.files[0];
+                    if (!file) return;
+
+                    // Validasi ukuran (2MB)
+                    if (file.size > 2 * 1024 * 1024) {
+                        alert('Ukuran file terlalu besar! Maksimal 2MB.');
+                        this.value = '';
+                        return;
+                    }
+
+                    // Validasi tipe file
+                    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+                    if (!allowedTypes.includes(file.type)) {
+                        alert('Format file tidak didukung! Gunakan JPG, JPEG, atau PNG.');
+                        this.value = '';
+                        return;
+                    }
+                });
+            });
+        });
+    </script>
+@endpush
