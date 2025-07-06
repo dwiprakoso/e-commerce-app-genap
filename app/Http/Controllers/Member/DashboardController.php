@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Member;
 
 use App\Models\Video;
 use App\Models\Berita;
+use App\Models\Member;
 use App\Models\Gallery;
 use App\Models\PaketWisata;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -56,6 +58,17 @@ class DashboardController extends Controller
             'stats',
             'paketPopuler'
         ));
+    }
+    public function profile()
+    {
+        // Cara yang lebih efisien - langsung query berdasarkan ID
+        $user = Member::find(Auth::id());
+
+        // Alternatif lain yang juga benar:
+        // $user = Member::where('id', Auth::id())->first();
+        // $user = Auth::user(); // Jika sudah setup guard dengan model Member
+
+        return view('member.page.profile.index', compact('user'));
     }
 
     public function paketWisata(Request $request)

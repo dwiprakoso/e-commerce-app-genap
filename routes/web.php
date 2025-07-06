@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\VideoController;
 use App\Http\Controllers\Member\AuthController as MemberAuthController;
 use App\Http\Controllers\Member\DashboardController as MemberDashboardController;
 use Illuminate\Support\Facades\Route;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 Route::get('/login', function () {
     return redirect()->route('member.login');
@@ -50,6 +51,7 @@ Route::prefix('member')->group(function () {
         Route::get('/paket-wisata/{id}/pesan', [MemberController::class, 'formPesan'])->name('member.paket-wisata.pesan');
         Route::post('/paket-wisata/{id}/pesan', [MemberController::class, 'storePesan'])->name('member.paket-wisata.store-pesan');
         Route::get('/pesanan-saya', [MemberController::class, 'pesananSaya'])->name('member.pesanan');
+        Route::get('/profile', [MemberDashboardController::class, 'profile'])->name('member.profile');
 
         Route::post('/logout', [MemberAuthController::class, 'logout'])->name('member.logout');
     });
