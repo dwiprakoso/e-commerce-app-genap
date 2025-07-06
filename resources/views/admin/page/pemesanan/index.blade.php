@@ -218,13 +218,26 @@
 
             <!-- Data Table -->
             <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <a href="{{ route('admin.pemesanan.export.excel') }}" class="btn btn-success">
-                        <i class="fas fa-file-excel"></i> Export Excel
-                    </a>
-                    <a href="{{ route('admin.pemesanan.export.pdf') }}" class="btn btn-danger ml-2">
-                        <i class="fas fa-file-pdf"></i> Export PDF
-                    </a>
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <!-- Alternative Export Buttons - Menggunakan parameter filter eksplisit -->
+                        <a href="{{ route('admin.pemesanan.export.excel') }}?period={{ $revenueData['period'] }}&date_from={{ $revenueData['date_from'] }}&date_to={{ $revenueData['date_to'] }}"
+                            class="btn btn-success">
+                            <i class="fas fa-file-excel"></i> Export Excel
+                        </a>
+                        <a href="{{ route('admin.pemesanan.export.pdf') }}?period={{ $revenueData['period'] }}&date_from={{ $revenueData['date_from'] }}&date_to={{ $revenueData['date_to'] }}"
+                            class="btn btn-danger ml-2">
+                            <i class="fas fa-file-pdf"></i> Export PDF
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <!-- Table content tetap sama -->
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <!-- Table headers dan content tetap sama -->
+                            </table>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">

@@ -117,6 +117,28 @@ class PemesananController extends Controller
             // Get filter parameters
             $dateFrom = $request->input('date_from');
             $dateTo = $request->input('date_to');
+            $period = $request->input('period', 'all');
+
+            // Set default dates berdasarkan period (sama seperti di index)
+            if ($period !== 'custom') {
+                switch ($period) {
+                    case 'week':
+                        $dateFrom = now()->startOfWeek()->format('Y-m-d');
+                        $dateTo = now()->endOfWeek()->format('Y-m-d');
+                        break;
+                    case 'month':
+                        $dateFrom = now()->startOfMonth()->format('Y-m-d');
+                        $dateTo = now()->endOfMonth()->format('Y-m-d');
+                        break;
+                    case 'year':
+                        $dateFrom = now()->startOfYear()->format('Y-m-d');
+                        $dateTo = now()->endOfYear()->format('Y-m-d');
+                        break;
+                    default: // 'all'
+                        $dateFrom = null;
+                        $dateTo = null;
+                }
+            }
 
             // Build query with filters
             $query = Pesan::with(['member', 'paketwisata']);
@@ -148,7 +170,7 @@ class PemesananController extends Controller
             Log::info('Excel export starting for file: ' . $fileName);
 
             // Pass filters to export class
-            return Excel::download(new PemesananExport($dateFrom, $dateTo), $fileName);
+            return Excel::download(new PemesananExport($dateFrom, $dateTo, $period), $fileName);
         } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
             Log::error('Excel Validation Error: ' . json_encode($e->failures()));
             return redirect()->back()->with('error', 'Validasi Excel gagal: ' . implode(', ', $e->failures()));
@@ -171,6 +193,28 @@ class PemesananController extends Controller
             // Get filter parameters
             $dateFrom = $request->input('date_from');
             $dateTo = $request->input('date_to');
+            $period = $request->input('period', 'all');
+
+            // Set default dates berdasarkan period (sama seperti di index)
+            if ($period !== 'custom') {
+                switch ($period) {
+                    case 'week':
+                        $dateFrom = now()->startOfWeek()->format('Y-m-d');
+                        $dateTo = now()->endOfWeek()->format('Y-m-d');
+                        break;
+                    case 'month':
+                        $dateFrom = now()->startOfMonth()->format('Y-m-d');
+                        $dateTo = now()->endOfMonth()->format('Y-m-d');
+                        break;
+                    case 'year':
+                        $dateFrom = now()->startOfYear()->format('Y-m-d');
+                        $dateTo = now()->endOfYear()->format('Y-m-d');
+                        break;
+                    default: // 'all'
+                        $dateFrom = null;
+                        $dateTo = null;
+                }
+            }
 
             // Build query with filters
             $query = Pesan::with(['member', 'paketwisata']);
@@ -184,12 +228,18 @@ class PemesananController extends Controller
 
             $pemesanans = $query->orderBy('created_at', 'desc')->get();
 
+            // Check if data exists
+            if ($pemesanans->isEmpty()) {
+                return redirect()->back()->with('warning', 'Tidak ada data untuk diexport');
+            }
+
             // Calculate revenue data for PDF
             $revenueData = [
                 'total_revenue' => $pemesanans->whereIn('status', ['diverifikasi', 'selesai'])->sum('total_harga'),
                 'total_orders' => $pemesanans->whereIn('status', ['diverifikasi', 'selesai'])->count(),
                 'date_from' => $dateFrom,
-                'date_to' => $dateTo
+                'date_to' => $dateTo,
+                'period' => $period
             ];
 
             $pdf = Pdf::loadView('admin.exports.pemesanan_pdf', compact('pemesanans', 'revenueData'));
