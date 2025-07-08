@@ -153,9 +153,6 @@
         <div class="info-item">
             <strong>Tanggal Cetak:</strong> {{ date('d/m/Y H:i') }}
         </div>
-        <div class="info-item">
-            <strong>Total Data:</strong> {{ $pemesanans->count() }} pemesanan
-        </div>
 
         <!-- Tambahan info periode (opsional) -->
         @if (isset($revenueData['date_from']) &&
@@ -166,12 +163,6 @@
             <div class="info-item">
                 <strong>Periode:</strong> {{ date('d/m/Y', strtotime($revenueData['date_from'])) }} -
                 {{ date('d/m/Y', strtotime($revenueData['date_to'])) }}
-            </div>
-        @endif
-
-        @if (isset($revenueData['total_revenue']))
-            <div class="info-item">
-                <strong>Total Pendapatan:</strong> Rp. {{ number_format($revenueData['total_revenue'], 0, ',', '.') }}
             </div>
         @endif
     </div>
@@ -234,24 +225,12 @@
             <h4>Ringkasan Status:</h4>
             <table style="width: 300px; font-size: 11px;">
                 <tr>
-                    <td><strong>Total Pending:</strong></td>
-                    <td class="text-right">{{ $pemesanans->where('status', 'pending')->count() }}</td>
-                </tr>
-                <tr>
                     <td><strong>Total Dibayar:</strong></td>
                     <td class="text-right">{{ $pemesanans->where('status', 'dibayar')->count() }}</td>
                 </tr>
                 <tr>
-                    <td><strong>Total Diverifikasi:</strong></td>
-                    <td class="text-right">{{ $pemesanans->where('status', 'diverifikasi')->count() }}</td>
-                </tr>
-                <tr>
                     <td><strong>Total Selesai:</strong></td>
                     <td class="text-right">{{ $pemesanans->where('status', 'selesai')->count() }}</td>
-                </tr>
-                <tr>
-                    <td><strong>Total Dibatalkan:</strong></td>
-                    <td class="text-right">{{ $pemesanans->where('status', 'dibatalkan')->count() }}</td>
                 </tr>
                 <tr style="border-top: 2px solid #333; font-weight: bold;">
                     <td><strong>TOTAL KESELURUHAN:</strong></td>
