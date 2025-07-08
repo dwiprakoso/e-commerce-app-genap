@@ -101,6 +101,33 @@
             background-color: #dc3545;
         }
 
+        /* Style untuk footer tabel (total penjualan) */
+        .table-footer {
+            background-color: #f8f9fa;
+            border-top: 3px solid #333;
+            font-weight: bold;
+            font-size: 11px;
+        }
+
+        .table-footer td {
+            border-top: 3px solid #333;
+            background-color: #f8f9fa;
+        }
+
+        .total-label {
+            background-color: #4472C4;
+            color: black;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .total-value {
+            background-color: #e3f2fd;
+            font-weight: bold;
+            font-size: 12px;
+            color: #1976d2;
+        }
+
         .footer {
             margin-top: 30px;
             text-align: right;
@@ -157,9 +184,9 @@
                     <th width="15%">Nama Member</th>
                     <th width="20%">Paket Wisata</th>
                     <th width="8%">Jumlah</th>
-                    <th width="15%">Total Harga</th>
                     <th width="10%">Status</th>
                     <th width="17%">Tanggal Pesan</th>
+                    <th width="15%">Total Harga</th>
                 </tr>
             </thead>
             <tbody>
@@ -182,16 +209,25 @@
                             @endif
                         </td>
                         <td class="text-center">{{ $pemesanan->jumlah_orang }} orang</td>
-                        <td class="text-right">Rp. {{ number_format($pemesanan->total_harga, 0, ',', '.') }}</td>
                         <td class="text-center">
                             <span class="status-badge status-{{ $pemesanan->status }}">
                                 {{ ucfirst($pemesanan->status) }}
                             </span>
                         </td>
                         <td class="text-center">{{ $pemesanan->created_at->format('d/m/Y H:i') }}</td>
+                        <td class="text-right">Rp. {{ number_format($pemesanan->total_harga, 0, ',', '.') }}</td>
                     </tr>
                 @endforeach
             </tbody>
+            <tfoot>
+                <tr class="table-footer">
+                    <td colspan="3" class="total-label">TOTAL PESANAN</td>
+                    <td class="text-center total-value">{{ $pemesanans->count() }} pesanan</td>
+                    <td colspan="2" class="total-label">TOTAL PENJUALAN</td>
+                    <td class="text-right total-value">Rp.
+                        {{ number_format($pemesanans->sum('total_harga'), 0, ',', '.') }}</td>
+                </tr>
+            </tfoot>
         </table>
 
         <div style="margin-top: 20px;">
