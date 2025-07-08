@@ -225,8 +225,8 @@
             <h4>Ringkasan Status:</h4>
             <table style="width: 300px; font-size: 11px;">
                 <tr>
-                    <td><strong>Total Dibayar:</strong></td>
-                    <td class="text-right">{{ $pemesanans->where('status', 'dibayar')->count() }}</td>
+                    <td><strong>Total Diverifikasi:</strong></td>
+                    <td class="text-right">{{ $pemesanans->where('status', 'diverifikasi')->count() }}</td>
                 </tr>
                 <tr>
                     <td><strong>Total Selesai:</strong></td>

@@ -216,9 +216,9 @@ class PemesananController extends Controller
                 }
             }
 
-            // Build query with filters - HANYA AMBIL STATUS SELESAI DAN DIBAYAR
+            // Build query with filters - HANYA SELESAI DAN DIVERIFIKASI
             $query = Pesan::with(['member', 'paketwisata'])
-                ->whereIn('status', ['selesai', 'dibayar']);
+                ->whereIn('status', ['selesai', 'diverifikasi']);
 
             if ($dateFrom && $dateTo) {
                 $query->whereBetween('created_at', [
@@ -231,11 +231,13 @@ class PemesananController extends Controller
 
             // Check if data exists
             if ($pemesanans->isEmpty()) {
-                return redirect()->back()->with('warning', 'Tidak ada data pemesanan selesai/dibayar untuk diexport');
+                return redirect()->back()->with('warning', 'Tidak ada data selesai/diverifikasi untuk diexport');
             }
 
             // Calculate revenue data for PDF
             $revenueData = [
+                'total_revenue' => $pemesanans->sum('total_harga'),
+                'total_orders' => $pemesanans->count(),
                 'date_from' => $dateFrom,
                 'date_to' => $dateTo,
                 'period' => $period
@@ -245,7 +247,7 @@ class PemesananController extends Controller
             $pdf->setPaper('A4', 'landscape');
 
             // Create filename with date range
-            $fileName = 'pemesanan_';
+            $fileName = 'pemesanan_selesai_';
             if ($dateFrom && $dateTo) {
                 $fileName .= date('Y-m-d', strtotime($dateFrom)) . '_to_' . date('Y-m-d', strtotime($dateTo));
             } else {
